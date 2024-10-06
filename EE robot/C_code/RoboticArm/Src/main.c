@@ -11,6 +11,9 @@
 #include "hardware/gpio.h"
 #include "hardware/adc.h"
 
+#ifndef M_PI
+#define M_PI 3.14159265358
+#endif
 
 // I2C defines
 // This example will use I2C0 on GPIO8 (SDA) and GPIO9 (SCL) running at 400KHz.
