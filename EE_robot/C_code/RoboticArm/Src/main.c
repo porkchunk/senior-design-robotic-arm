@@ -28,6 +28,7 @@ int main()
     interrupt_initialization();
 
     initialize_auto_manual_pin();
+    initialize_start_auto_mode();
 
     set_zero_position();
 

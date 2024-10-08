@@ -2,6 +2,7 @@
 #define ROBOT_MODES_H
 
 #define AUTO_MANUAL_SWITCH_PIN 15
+#define AUTO_START_SWITCH 0
 #define STARTING_X 25
 #define STARTING_Y 0
 #define STARTING_Z 19.9

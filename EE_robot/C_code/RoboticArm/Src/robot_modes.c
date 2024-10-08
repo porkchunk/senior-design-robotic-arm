@@ -15,6 +15,12 @@ float countZ = 0;
 
 uint16_t result;
 
+void initialize_start_auto_mode(){
+    gpio_init(AUTO_START_SWITCH);
+    gpio_set_input_enabled(AUTO_START_SWITCH, true);
+    gpio_pull_down(AUTO_START_SWITCH);
+}
+
 void initialize_auto_manual_pin(){
     gpio_init(AUTO_MANUAL_SWITCH_PIN);
     gpio_set_input_enabled(AUTO_MANUAL_SWITCH_PIN, true);
@@ -22,7 +28,6 @@ void initialize_auto_manual_pin(){
 }
 
 void manual_mode(){
-
     diff_x = xyzpitch[0];
     diff_y = xyzpitch[1];
     diff_z = xyzpitch[2];
@@ -66,19 +71,25 @@ void manual_mode(){
 
 void automatic_mode()
 {
-    claw_position = false;
-    claw_move(slice_motors, chan_motors);
+    if(gpio_get(AUTO_START_SWITCH) == false){
 
-    set_initial_position();
+        xyzpitch[0] = STARTING_X + 3;
+        xyzpitch[1] = STARTING_Y - 9;
+        xyzpitch[2] = STARTING_Z - 9;
+        xyzpitch[3] = STARTING_PITCH;
+        robot_move(xyzpitch, slice_motors, chan_motors);
 
-    sleep_ms(500);
+        claw_position = true;
+        claw_move(slice_motors, chan_motors);
 
-    xyzpitch[0] = STARTING_X + 3;
-    xyzpitch[1] = STARTING_Y - 9;
-    xyzpitch[2] = STARTING_Z - 9;
-    xyzpitch[3] = STARTING_PITCH;
+        sleep_ms(500);
 
-    robot_move(xyzpitch, slice_motors, chan_motors);
+        set_initial_position();
 
-    sleep_ms(500);
+        claw_position = false;
+        claw_move(slice_motors, chan_motors);
+
+        sleep_ms(500);
+        
+    }
 }
