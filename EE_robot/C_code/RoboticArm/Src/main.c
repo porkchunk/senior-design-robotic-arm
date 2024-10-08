@@ -27,15 +27,20 @@ int main()
     I2C_initialization();
     interrupt_initialization();
 
-    set_initial_position();
+    initialize_auto_manual_pin();
 
-    
+    set_initial_position();
 
     uint64_t start;
     uint64_t end;
     uint64_t time_taken;
     
     while (true) {
-        manual_mode();
+        if(gpio_get(AUTO_MANUAL_SWITCH_PIN) == true){
+            manual_mode();
+        }
+        else{
+            automatic_mode();
+        }
     }
 }

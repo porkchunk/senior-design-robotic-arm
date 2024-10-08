@@ -3,6 +3,7 @@
 #include "robot_commands.h"
 #include "hardware/adc.h"
 #include "pwm.h"
+#include "pico/stdlib.h"
 
 const float starting_x = 25;
 const float starting_y = 0;
@@ -18,6 +19,12 @@ float countX = 0;
 float countZ = 0;
 
 uint16_t result;
+
+void initialize_auto_manual_pin(){
+    gpio_init(AUTO_MANUAL_SWITCH_PIN);
+    gpio_set_input_enabled(AUTO_MANUAL_SWITCH_PIN, true);
+    gpio_pull_down(AUTO_MANUAL_SWITCH_PIN);
+}
 
 void manual_mode(){
 
@@ -64,5 +71,22 @@ void manual_mode(){
 
 void automatic_mode()
 {
-;
+    xyzpitch[0] = starting_x + 5;
+    xyzpitch[1] = starting_y;
+    xyzpitch[2] = starting_z;
+    xyzpitch[3] = starting_pitch;
+
+    set_initial_position();
+
+    sleep_ms(500);
+
+    robot_move(xyzpitch, slice_motors, chan_motors);
+
+    sleep_ms(500);
+
+    xyzpitch[0] = starting_x;
+
+    robot_move(xyzpitch, slice_motors, chan_motors);
+
+    sleep_ms(500);
 }
