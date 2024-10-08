@@ -5,11 +5,6 @@
 #include "pwm.h"
 #include "pico/stdlib.h"
 
-const float starting_x = 25;
-const float starting_y = 0;
-const float starting_z = 19.9;
-const float starting_pitch = 0;
-
 float diff_x = 0;
 float diff_y = 0;
 float diff_z = 0;
@@ -57,10 +52,10 @@ void manual_mode(){
         countX -= 0.03;
     }
     
-    xyzpitch[0] = starting_x + countX;
-    xyzpitch[1] = starting_y + countY;
-    xyzpitch[2] = starting_z + countZ;
-    xyzpitch[3] = starting_pitch;
+    xyzpitch[0] = STARTING_X + countX;
+    xyzpitch[1] = STARTING_Y + countY;
+    xyzpitch[2] = STARTING_Z + countZ;
+    xyzpitch[3] = STARTING_PITCH;
     
     if(xyzpitch[0] != diff_x || xyzpitch[1] != diff_y || xyzpitch[2] != diff_z){
         robot_move(xyzpitch, slice_motors, chan_motors);
@@ -71,20 +66,17 @@ void manual_mode(){
 
 void automatic_mode()
 {
-    xyzpitch[0] = starting_x + 5;
-    xyzpitch[1] = starting_y;
-    xyzpitch[2] = starting_z;
-    xyzpitch[3] = starting_pitch;
+    claw_position = false;
+    claw_move(slice_motors, chan_motors);
 
     set_initial_position();
 
     sleep_ms(500);
 
-    robot_move(xyzpitch, slice_motors, chan_motors);
-
-    sleep_ms(500);
-
-    xyzpitch[0] = starting_x;
+    xyzpitch[0] = STARTING_X + 3;
+    xyzpitch[1] = STARTING_Y - 9;
+    xyzpitch[2] = STARTING_Z - 9;
+    xyzpitch[3] = STARTING_PITCH;
 
     robot_move(xyzpitch, slice_motors, chan_motors);
 

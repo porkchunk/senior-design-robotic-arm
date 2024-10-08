@@ -29,7 +29,7 @@ int main()
 
     initialize_auto_manual_pin();
 
-    set_initial_position();
+    set_zero_position();
 
     uint64_t start;
     uint64_t end;

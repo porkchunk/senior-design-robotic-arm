@@ -3,6 +3,7 @@
 #include "pico/stdlib.h"
 #include "main.h"
 #include "pwm.h"
+#include "robot_modes.h"
 #include <math.h>
 
 #ifndef M_PI
@@ -135,11 +136,21 @@ void claw_move(uint slice_motors[], uint chan_motors[]){
     pwm_set_enabled(slice_motors[MOTOR_6], true);
 }
 
-void set_initial_position(){
+void set_zero_position(){
     duty_cycle_set(0, M_PI/2, -M_PI/2, 0, 1);
     motor_move(slice_motors, chan_motors);
     claw_move(slice_motors, chan_motors);
+
     sleep_ms(1000);
+}
+
+void set_initial_position(){
+    xyzpitch[0] = STARTING_X;
+    xyzpitch[1] = STARTING_Y;
+    xyzpitch[2] = STARTING_Z;
+    xyzpitch[3] = STARTING_PITCH;
+
+    robot_move(xyzpitch, slice_motors, chan_motors);
 }
 
 void robot_move(float xyzpitch[4],uint slice_motors[],uint chan_motors[]){
@@ -205,6 +216,6 @@ void robot_move(float xyzpitch[4],uint slice_motors[],uint chan_motors[]){
         jacobian_function(initial_angle[0], initial_angle[1], initial_angle[2], initial_angle[3], jacobian_matrix);
 
         ++count;
-        if(count >= 500){error = 4000;}
+        if(count >= norm(total_distance)/(speed*time_step)){error = 4000;}
     }
 }

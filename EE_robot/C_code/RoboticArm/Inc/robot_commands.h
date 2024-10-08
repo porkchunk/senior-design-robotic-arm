@@ -21,5 +21,6 @@ float map_function(float input, float input_start, float input_end, float output
 void claw_move(uint slice_motors[], uint chan_motors[]);
 void robot_move(float xyzpitch[4],uint slice_motors[],uint chan_motors[]);
 void set_initial_position();
+void set_zero_position();
 
 #endif
