@@ -10,6 +10,6 @@
 
 #define I2C_FREQ 400*100
 
-void I2C_initalization();
+void I2C_initialization();
 
 #endif

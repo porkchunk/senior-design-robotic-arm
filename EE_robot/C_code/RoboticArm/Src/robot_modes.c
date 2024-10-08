@@ -9,16 +9,17 @@ const float starting_y = 0;
 const float starting_z = 19.9;
 const float starting_pitch = 0;
 
-float diff_x;
-float diff_y;
-float diff_z;
+float diff_x = 0;
+float diff_y = 0;
+float diff_z = 0;
+
+float countY = 0;
+float countX = 0;
+float countZ = 0;
 
 uint16_t result;
 
 void manual_mode(){
-    float countY = 0;
-    float countX = 0;
-    float countZ = 0;
 
     diff_x = xyzpitch[0];
     diff_y = xyzpitch[1];

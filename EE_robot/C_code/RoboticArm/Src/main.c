@@ -24,15 +24,18 @@ int main()
     stdio_init_all();
     pwm_initialization();
     adc_initialization();
-    i2c_initialization();
+    I2C_initialization();
     interrupt_initialization();
+
+    set_initial_position();
+
+    
 
     uint64_t start;
     uint64_t end;
     uint64_t time_taken;
     
     while (true) {
-        ;
-    
+        manual_mode();
     }
 }
