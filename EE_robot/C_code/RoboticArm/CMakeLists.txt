@@ -197,7 +197,8 @@ target_link_libraries(LibModule
                 hardware_i2c   
                 hardware_gpio   
                 hardware_pwm    
-                hardware_adc)
+                hardware_adc
+                pico_multicore)
 
 # Add the standard include files to the build
 target_include_directories(RoboticArm PRIVATE
@@ -211,6 +212,7 @@ target_link_libraries(RoboticArm
         hardware_gpio hardware_pwm
         hardware_adc
         LibModule
+        pico_multicore
         )
 
 pico_add_extra_outputs(RoboticArm)

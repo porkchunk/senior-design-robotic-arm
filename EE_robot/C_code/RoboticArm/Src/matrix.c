@@ -43,7 +43,6 @@ float determinant(float mat[MATRIX_SIZE][MATRIX_SIZE], int n) {
         // Terms are to be added with alternate sign
         sign = -sign;
     }
-
     return D;
 }
 

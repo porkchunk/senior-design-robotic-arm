@@ -9,6 +9,7 @@
 #include "robot_modes.h"
 #include "timer.h"
 #include "main.h"
+#include "I2C.h"
 
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
@@ -16,6 +17,8 @@
 #include "hardware/pwm.h"
 #include "hardware/gpio.h"
 #include "hardware/adc.h"
+#include "pico/multicore.h"
+
 
 int main()
 {

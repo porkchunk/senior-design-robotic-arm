@@ -154,6 +154,7 @@ void set_initial_position(){
 }
 
 void robot_move(float xyzpitch[4]){
+    //Convert current duty_cycle to angle based on model of robot
     float theta1 = map_function(20*duty_cycle_motors.motor1, 0.5, 2.5, -M_PI/2, M_PI/2);
     float theta2 = map_function(20*duty_cycle_motors.motor2, 0.5, 2.5, M_PI, 0);
     float theta3 = map_function(20*duty_cycle_motors.motor3, 0.56, 2.06, (-3*M_PI)/4, 0);
@@ -168,12 +169,12 @@ void robot_move(float xyzpitch[4]){
     float total_distance[4];
     float velocity[4][1];
     float new_angle[4];
-    float time_step = 0.01;
     float delta_angle[4][1];
+    float time_step = 0.01;
     float error = 0.01;
+    float speed = 1;
 
     uint32_t count = 0;
-    float speed = 1;
 
     jacobian_function(theta1, theta2, theta3, theta4, jacobian_matrix);
     forward_kinematics(theta1, theta2, theta3, theta4, position_initial);
@@ -191,30 +192,36 @@ void robot_move(float xyzpitch[4]){
     initial_angle[2] = theta3;
     initial_angle[3] = theta4;
 
-    uint64_t start;
-    uint64_t end;
     while(norm(position_difference) >= error){
+        //position_final = position_initial - position_difference
         add_subtract_matrix(position_final, position_initial, position_difference, false);
 
+        //velocity = speed*(position_difference/norm(position_difference))
         calculate_velocity(position_difference, velocity, speed);
 
+        //Exit if jacobian_matrix is not invertible
         if(inverse(jacobian_matrix, jacobian_inverse) == 0){
             error = 4000;
         }
 
+        //Calculate delta_angle from delta_angle = J^{-1} * Velocity
         multiply_matrices_angle(jacobian_inverse, velocity, delta_angle);
 
+        //Calculate all new angles to send to motors
         initial_angle[0] = delta_angle[0][0]*time_step + initial_angle[0];
         initial_angle[1] = delta_angle[1][0]*time_step + initial_angle[1];
         initial_angle[2] = delta_angle[2][0]*time_step + initial_angle[2];
         initial_angle[3] = delta_angle[3][0]*time_step + initial_angle[3];
 
+        //Send new angles to motors
         duty_cycle_set(initial_angle[0], initial_angle[1], initial_angle[2], initial_angle[3], 1);
         motor_move(slice_motors, chan_motors);
 
+        //Calculate new position and jacobian
         forward_kinematics(initial_angle[0], initial_angle[1], initial_angle[2], initial_angle[3], position_initial);
         jacobian_function(initial_angle[0], initial_angle[1], initial_angle[2], initial_angle[3], jacobian_matrix);
 
+        //End robot_move if count goes too high
         ++count;
         if(count >= norm(total_distance)/(speed*time_step)){error = 4000;}
     }

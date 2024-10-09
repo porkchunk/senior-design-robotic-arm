@@ -32,6 +32,7 @@ void manual_mode(){
     diff_y = xyzpitch[1]; 
     diff_z = xyzpitch[2];
 
+    //Read y-axis input for joystick
     adc_select_input(0);
     result = adc_read();
     if(result < 1500){
@@ -40,6 +41,8 @@ void manual_mode(){
     if(result > 2500){
         countY -= 0.03;
     }
+
+    //Read z-axis input for joystick
     adc_select_input(1);
     result = adc_read();
     if(result < 1900){
@@ -48,6 +51,8 @@ void manual_mode(){
     if(result > 2100){
         countZ -= 0.02;
     }
+
+    //Read x-axis input for joystick
     adc_select_input(2);
     result = adc_read();
     if(result < 1500){
@@ -71,7 +76,8 @@ void manual_mode(){
 }
 
 void automatic_mode()
-{
+{ 
+    //If left joystick button is pressed run auto mode
     if(gpio_get(AUTO_START_SWITCH) == false){
         xyzpitch[0] = STARTING_X + 3;
         xyzpitch[1] = STARTING_Y - 9;
