@@ -19,22 +19,23 @@
 
 int main()
 {
+    //Sets system clock frequency
     set_sys_clock_khz(SYS_FREQ_KHZ, true);
 
+    //All initializations 
     stdio_init_all();
     pwm_initialization();
     adc_initialization();
     I2C_initialization();
     interrupt_initialization();
-
     initialize_auto_manual_pin();
-    initialize_start_auto_mode();
+    initialize_start_auto_mode_pin();
 
+    //Positions robot in initial position and lets pico know where robot is
     set_zero_position();
 
     uint64_t start;
     uint64_t end;
-    uint64_t time_taken;
     
     while (true) {
         if(gpio_get(AUTO_MANUAL_SWITCH_PIN) == true){

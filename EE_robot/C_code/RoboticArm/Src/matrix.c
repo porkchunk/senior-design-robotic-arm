@@ -3,7 +3,7 @@
 #include <math.h>
 
 // Function to get cofactor of mat[p][q] in temp[][]. n is the current dimension of mat[][]
-void getCofactor(float mat[N][N], float temp[N][N], int p, int q, int n) {
+void getCofactor(float mat[MATRIX_SIZE][MATRIX_SIZE], float temp[MATRIX_SIZE][MATRIX_SIZE], int p, int q, int n) {
     int i = 0, j = 0;
 
     // Looping for each element of the matrix
@@ -24,14 +24,14 @@ void getCofactor(float mat[N][N], float temp[N][N], int p, int q, int n) {
 }
 
 // Recursive function to find determinant of matrix mat[][]
-float determinant(float mat[N][N], int n) {
+float determinant(float mat[MATRIX_SIZE][MATRIX_SIZE], int n) {
     float D = 0;  // Initialize result
 
     // Base case: if matrix contains single element
     if (n == 1)
         return mat[0][0];
 
-    float temp[N][N];  // To store cofactors
+    float temp[MATRIX_SIZE][MATRIX_SIZE];  // To store cofactors
     int sign = 1;  // To store sign multiplier
 
     // Iterate for each element of first row
@@ -47,47 +47,47 @@ float determinant(float mat[N][N], int n) {
     return D;
 }
 
-// Function to get adjoint of mat[N][N] in adj[N][N]
-void adjoint(float mat[N][N], float adj[N][N]) {
-    if (N == 1) {
+// Function to get adjoint of mat[MATRIX_SIZE][MATRIX_SIZE] in adj[MATRIX_SIZE][MATRIX_SIZE]
+void adjoint(float mat[MATRIX_SIZE][MATRIX_SIZE], float adj[MATRIX_SIZE][MATRIX_SIZE]) {
+    if (MATRIX_SIZE == 1) {
         adj[0][0] = 1;
         return;
     }
 
     // temp is used to store cofactors
     int sign = 1;
-    float temp[N][N];
+    float temp[MATRIX_SIZE][MATRIX_SIZE];
 
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
+    for (int i = 0; i < MATRIX_SIZE; i++) {
+        for (int j = 0; j < MATRIX_SIZE; j++) {
             // Get cofactor of mat[i][j]
-            getCofactor(mat, temp, i, j, N);
+            getCofactor(mat, temp, i, j, MATRIX_SIZE);
 
             // Sign of adj[j][i] positive if sum of row and column indexes is even.
             sign = ((i + j) % 2 == 0) ? 1 : -1;
 
             // Interchanging rows and columns to get the transpose of the cofactor matrix
-            adj[j][i] = (sign) * (determinant(temp, N - 1));
+            adj[j][i] = (sign) * (determinant(temp, MATRIX_SIZE - 1));
         }
     }
 }
 
 // Function to calculate the inverse of a matrix. Returns 1 if the matrix is invertible, otherwise 0.
-int inverse(float mat[N][N], float inverse[N][N]) {
+int inverse(float mat[MATRIX_SIZE][MATRIX_SIZE], float inverse[MATRIX_SIZE][MATRIX_SIZE]) {
     // Find determinant of matrix
-    float det = determinant(mat, N);
+    float det = determinant(mat, MATRIX_SIZE);
     if (det == 0) {
         printf("Matrix is singular, cannot find its inverse\n");
         return 0;
     }
 
     // Find adjoint
-    float adj[N][N];
+    float adj[MATRIX_SIZE][MATRIX_SIZE];
     adjoint(mat, adj);
 
     // Inverse is adjoint divided by determinant
-    for (int i = 0; i < N; i++)
-        for (int j = 0; j < N; j++)
+    for (int i = 0; i < MATRIX_SIZE; i++)
+        for (int j = 0; j < MATRIX_SIZE; j++)
             inverse[i][j] = adj[i][j] / det;
 
     return 1;

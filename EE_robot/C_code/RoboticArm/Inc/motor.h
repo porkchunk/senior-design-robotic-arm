@@ -15,7 +15,7 @@
 
 #include "pico/stdlib.h"
 
-void motor_move(uint slice_motors[], uint chan_motors[]);
+void motor_move();
 void duty_cycle_set(float theta1, float theta2, float theta3, float theta4, uint config);
 
 #endif

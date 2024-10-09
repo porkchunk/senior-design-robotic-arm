@@ -11,7 +11,7 @@ void duty_cycle_set(float theta1, float theta2, float theta3, float theta4, uint
     duty_cycle_motors.motor4 = map_function(theta4, -M_PI/2, M_PI/2, 0.5, 2.5)/20;
 }
 
-void motor_move(uint slice_motors[], uint chan_motors[]){
+void motor_move(){
     pwm_set_freq_duty(slice_motors[MOTOR_1], chan_motors[MOTOR_1], PWM_FREQ, duty_cycle_motors.motor1);
     pwm_set_freq_duty(slice_motors[MOTOR_2], chan_motors[MOTOR_2], PWM_FREQ, duty_cycle_motors.motor2);
     pwm_set_freq_duty(slice_motors[MOTOR_3], chan_motors[MOTOR_3], PWM_FREQ, duty_cycle_motors.motor3);

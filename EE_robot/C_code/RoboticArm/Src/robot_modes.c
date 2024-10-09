@@ -15,7 +15,7 @@ float countZ = 0;
 
 uint16_t result;
 
-void initialize_start_auto_mode(){
+void initialize_start_auto_mode_pin(){
     gpio_init(AUTO_START_SWITCH);
     gpio_set_input_enabled(AUTO_START_SWITCH, true);
     gpio_pull_down(AUTO_START_SWITCH);
@@ -29,7 +29,7 @@ void initialize_auto_manual_pin(){
 
 void manual_mode(){
     diff_x = xyzpitch[0];
-    diff_y = xyzpitch[1];
+    diff_y = xyzpitch[1]; 
     diff_z = xyzpitch[2];
 
     adc_select_input(0);
@@ -62,34 +62,33 @@ void manual_mode(){
     xyzpitch[2] = STARTING_Z + countZ;
     xyzpitch[3] = STARTING_PITCH;
     
+    //If joystick moved, move robot
     if(xyzpitch[0] != diff_x || xyzpitch[1] != diff_y || xyzpitch[2] != diff_z){
-        robot_move(xyzpitch, slice_motors, chan_motors);
+        robot_move(xyzpitch);
     }
 
-    claw_move(slice_motors, chan_motors);
+    claw_move();
 }
 
 void automatic_mode()
 {
     if(gpio_get(AUTO_START_SWITCH) == false){
-
         xyzpitch[0] = STARTING_X + 3;
         xyzpitch[1] = STARTING_Y - 9;
         xyzpitch[2] = STARTING_Z - 9;
         xyzpitch[3] = STARTING_PITCH;
-        robot_move(xyzpitch, slice_motors, chan_motors);
+        robot_move(xyzpitch);
 
         claw_position = true;
-        claw_move(slice_motors, chan_motors);
+        claw_move();
 
         sleep_ms(500);
 
         set_initial_position();
 
         claw_position = false;
-        claw_move(slice_motors, chan_motors);
+        claw_move();
 
         sleep_ms(500);
-        
     }
 }

@@ -126,7 +126,7 @@ float map_function(float input, float input_start, float input_end, float output
     return output;
 }
 
-void claw_move(uint slice_motors[], uint chan_motors[]){
+void claw_move(){
     if(claw_position == true){
         pwm_set_freq_duty(slice_motors[MOTOR_6], chan_motors[MOTOR_6], PWM_FREQ, 2.15/20);
     }
@@ -150,10 +150,10 @@ void set_initial_position(){
     xyzpitch[2] = STARTING_Z;
     xyzpitch[3] = STARTING_PITCH;
 
-    robot_move(xyzpitch, slice_motors, chan_motors);
+    robot_move(xyzpitch);
 }
 
-void robot_move(float xyzpitch[4],uint slice_motors[],uint chan_motors[]){
+void robot_move(float xyzpitch[4]){
     float theta1 = map_function(20*duty_cycle_motors.motor1, 0.5, 2.5, -M_PI/2, M_PI/2);
     float theta2 = map_function(20*duty_cycle_motors.motor2, 0.5, 2.5, M_PI, 0);
     float theta3 = map_function(20*duty_cycle_motors.motor3, 0.56, 2.06, (-3*M_PI)/4, 0);

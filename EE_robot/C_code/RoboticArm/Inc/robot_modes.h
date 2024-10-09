@@ -11,5 +11,6 @@
 void manual_mode();
 void automatic_mode();
 void initialize_auto_manual_pin();
+void initialize_start_auto_mode_pin();
 
 #endif
