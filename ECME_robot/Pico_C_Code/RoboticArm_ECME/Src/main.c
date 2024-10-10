@@ -69,17 +69,8 @@ int main()
         xyzpitch[3] = 0;
         xyzpitch[4] = 0;
 
-        jacobian_function(0,M_PI/2,-M_PI/2,0,0,0,jacobian);
-
-        start = time_us_64();
-        pseudo_inverse(jacobian, jacobian_inverse);
-        end = time_us_64();
-
-        display(6,5,jacobian_inverse);
-
-        printf("%llu \n", end - start);
-        //robot_move(xyzpitch);
-
+        robot_move(xyzpitch);
+    
         /*
         xyzpitch[0] = STARTING_X;
         xyzpitch[1] = STARTING_Y;

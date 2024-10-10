@@ -169,38 +169,15 @@ void pseudo_inverse(float matrix[MATRIX_ROW_SIZE][MATRIX_COL_SIZE], float pseudo
     float first_term_linearly_surjective_inverse[5][5];
     float first_term_linearly_injective_inverse[6][6];
     float matrix_transpose[MATRIX_COL_SIZE][MATRIX_ROW_SIZE];
-
-    start = time_us_64();
     transpose(matrix, matrix_transpose);
-    end = time_us_64();
-
-    printf("Transpose: %llu \n", end - start);
-
-    start = time_us_64();
     multiply_matrices(5, 6, 5, matrix, matrix_transpose, first_term_linearly_surjective);
-    end = time_us_64();
 
-    printf("Multiply: %llu \n", end - start);
-
-    start = time_us_64();
     if(inverse(5, first_term_linearly_surjective, first_term_linearly_surjective_inverse) == 1){
-        end = time_us_64();
-
-        printf("Inverse: %llu \n", end - start);
-
-        start = time_us_64();
-
         multiply_matrices(6, 5, 5, matrix_transpose, first_term_linearly_surjective_inverse, pseudo_inverse);
-
-        end = time_us_64();
-
-    printf("Multiply: %llu \n\n", end - start);
     }
-    /*
     else{
         multiply_matrices(6, 5, 6, matrix_transpose, matrix, first_term_linearly_injective);
-        inverse(first_term_linearly_injective, first_term_linearly_injective_inverse);
+        inverse(6, first_term_linearly_injective, first_term_linearly_injective_inverse);
         multiply_matrices(5, 6, 5, first_term_linearly_injective_inverse, matrix_transpose, pseudo_inverse);
     }
-    */
 }

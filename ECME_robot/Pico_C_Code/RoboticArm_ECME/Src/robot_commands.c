@@ -265,6 +265,7 @@ void robot_move(float xyzpitch[5]){
     initial_angle[5] = theta6;
 
     while(norm(position_difference) >= error){
+        uint64_t start = time_us_64();
         //position_final = position_initial - position_difference
         add_subtract_matrix(position_final, position_initial, position_difference, false);
 
@@ -292,6 +293,9 @@ void robot_move(float xyzpitch[5]){
         forward_kinematics(initial_angle[0], initial_angle[1], initial_angle[2], initial_angle[3], initial_angle[4], initial_angle[5], position_initial);
         jacobian_function(initial_angle[0], initial_angle[1], initial_angle[2], initial_angle[3], initial_angle[4], initial_angle[5], jacobian_matrix);
 
+        uint64_t end = time_us_64();
+
+        printf("%llu \n", end - start);
         //End robot_move if count goes too high
         ++count;
         if(count >= norm(total_distance)/(speed*time_step)){error = 4000;}
