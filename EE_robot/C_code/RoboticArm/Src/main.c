@@ -41,12 +41,24 @@ int main()
     uint64_t end;
 
     float jacobian[4][4];
+    float jacobian_inverse[4][4];
     
     while (true) {
-        start = time_us_64();
-        jacobian_function(0,0,0,0,jacobian);
-        end = time_us_64();
-        printf("%llu \n", end - start);
+
+        xyzpitch[0] = STARTING_X + 0.03;
+        xyzpitch[1] = STARTING_Y + 0.03;
+        xyzpitch[2] = STARTING_X + 0.03;
+        xyzpitch[3] = 0;
+
+        robot_move(xyzpitch);
+        
+        xyzpitch[0] = STARTING_X;
+        xyzpitch[1] = STARTING_Y;
+        xyzpitch[2] = STARTING_X;
+        xyzpitch[3] = 0;
+
+        
+
         sleep_ms(500);
         /*
         if(gpio_get(AUTO_MANUAL_SWITCH_PIN) == true){

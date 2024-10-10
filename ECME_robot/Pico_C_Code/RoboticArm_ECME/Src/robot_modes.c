@@ -69,7 +69,7 @@ void manual_mode(){
     
     //If joystick moved, move robot
     if(xyzpitch[0] != diff_x || xyzpitch[1] != diff_y || xyzpitch[2] != diff_z){
-        robot_move(xyzpitch);
+        //robot_move(xyzpitch);
     }
 
     claw_move();
@@ -83,7 +83,7 @@ void automatic_mode()
         xyzpitch[1] = STARTING_Y - 9;
         xyzpitch[2] = STARTING_Z - 9;
         xyzpitch[3] = STARTING_PITCH;
-        robot_move(xyzpitch);
+        //robot_move(xyzpitch);
 
         claw_position = true;
         claw_move();

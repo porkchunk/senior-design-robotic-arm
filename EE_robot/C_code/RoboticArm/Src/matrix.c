@@ -2,92 +2,63 @@
 #include <stdio.h>
 #include <math.h>
 
-// Function to get cofactor of mat[p][q] in temp[][]. n is the current dimension of mat[][]
-void getCofactor(float mat[MATRIX_SIZE][MATRIX_SIZE], float temp[MATRIX_SIZE][MATRIX_SIZE], int p, int q, int n) {
-    int i = 0, j = 0;
+int inverse(int matrix_size, float mat[matrix_size][matrix_size], float inverse[matrix_size][matrix_size]) {
+    // Augmenting the matrix with the identity matrix
+    float aug[matrix_size][2 * matrix_size];
+    for (int i = 0; i < matrix_size; i++) {
+        for (int j = 0; j < matrix_size; j++) {
+            aug[i][j] = mat[i][j];  // Copy the original matrix
+            aug[i][j + matrix_size] = (i == j) ? 1.0 : 0.0;  // Augment with identity matrix
+        }
+    }
 
-    // Looping for each element of the matrix
-    for (int row = 0; row < n; row++) {
-        for (int col = 0; col < n; col++) {
-            // Copying into temporary matrix only those elements which are not in the given row and column
-            if (row != p && col != q) {
-                temp[i][j++] = mat[row][col];
+    // Performing Gaussian elimination
+    for (int i = 0; i < matrix_size; i++) {
+        // Make the diagonal element 1 by dividing the entire row by that element
+        if (aug[i][i] == 0) {
+            // If the pivot is zero, try to swap with a non-zero row below it
+            bool swapped = false;
+            for (int k = i + 1; k < matrix_size; k++) {
+                if (aug[k][i] != 0) {
+                    // Swap the rows
+                    for (int j = 0; j < 2 * matrix_size; j++) {
+                        float temp = aug[i][j];
+                        aug[i][j] = aug[k][j];
+                        aug[k][j] = temp;
+                    }
+                    swapped = true;
+                    break;
+                }
+            }
+            if (!swapped) {
+                printf("Matrix is singular, cannot find its inverse.\n");
+                return 0;
+            }
+        }
 
-                // Row is filled, so increase row index and reset column index
-                if (j == n - 1) {
-                    j = 0;
-                    i++;
+        // Normalize the current row
+        float diagElement = aug[i][i];
+        for (int j = 0; j < 2 * matrix_size; j++) {
+            aug[i][j] /= diagElement;
+        }
+
+        // Make other elements in the current column 0 by subtracting the appropriate multiple of the current row
+        for (int k = 0; k < matrix_size; k++) {
+            if (k != i) {
+                float factor = aug[k][i];
+                for (int j = 0; j < 2 * matrix_size; j++) {
+                    aug[k][j] -= factor * aug[i][j];
                 }
             }
         }
     }
-}
 
-// Recursive function to find determinant of matrix mat[][]
-float determinant(float mat[MATRIX_SIZE][MATRIX_SIZE], int n) {
-    float D = 0;  // Initialize result
-
-    // Base case: if matrix contains single element
-    if (n == 1)
-        return mat[0][0];
-
-    float temp[MATRIX_SIZE][MATRIX_SIZE];  // To store cofactors
-    int sign = 1;  // To store sign multiplier
-
-    // Iterate for each element of first row
-    for (int f = 0; f < n; f++) {
-        // Getting Cofactor of mat[0][f]
-        getCofactor(mat, temp, 0, f, n);
-        D += sign * mat[0][f] * determinant(temp, n - 1);
-
-        // Terms are to be added with alternate sign
-        sign = -sign;
-    }
-    return D;
-}
-
-// Function to get adjoint of mat[MATRIX_SIZE][MATRIX_SIZE] in adj[MATRIX_SIZE][MATRIX_SIZE]
-void adjoint(float mat[MATRIX_SIZE][MATRIX_SIZE], float adj[MATRIX_SIZE][MATRIX_SIZE]) {
-    if (MATRIX_SIZE == 1) {
-        adj[0][0] = 1;
-        return;
-    }
-
-    // temp is used to store cofactors
-    int sign = 1;
-    float temp[MATRIX_SIZE][MATRIX_SIZE];
-
-    for (int i = 0; i < MATRIX_SIZE; i++) {
-        for (int j = 0; j < MATRIX_SIZE; j++) {
-            // Get cofactor of mat[i][j]
-            getCofactor(mat, temp, i, j, MATRIX_SIZE);
-
-            // Sign of adj[j][i] positive if sum of row and column indexes is even.
-            sign = ((i + j) % 2 == 0) ? 1 : -1;
-
-            // Interchanging rows and columns to get the transpose of the cofactor matrix
-            adj[j][i] = (sign) * (determinant(temp, MATRIX_SIZE - 1));
+    // Extract the inverse matrix from the augmented matrix
+    for (int i = 0; i < matrix_size; i++) {
+        for (int j = 0; j < matrix_size; j++) {
+            inverse[i][j] = aug[i][j + matrix_size];
         }
     }
-}
-
-// Function to calculate the inverse of a matrix. Returns 1 if the matrix is invertible, otherwise 0.
-int inverse(float mat[MATRIX_SIZE][MATRIX_SIZE], float inverse[MATRIX_SIZE][MATRIX_SIZE]) {
-    // Find determinant of matrix
-    float det = determinant(mat, MATRIX_SIZE);
-    if (det == 0) {
-        printf("Matrix is singular, cannot find its inverse\n");
-        return 0;
-    }
-
-    // Find adjoint
-    float adj[MATRIX_SIZE][MATRIX_SIZE];
-    adjoint(mat, adj);
-
-    // Inverse is adjoint divided by determinant
-    for (int i = 0; i < MATRIX_SIZE; i++)
-        for (int j = 0; j < MATRIX_SIZE; j++)
-            inverse[i][j] = adj[i][j] / det;
 
     return 1;
 }

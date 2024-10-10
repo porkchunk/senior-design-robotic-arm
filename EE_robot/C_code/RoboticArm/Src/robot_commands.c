@@ -37,6 +37,16 @@ void transform_matrix(float alpha, float a, float d, float theta, float T[MATRIX
 }
 
 void forward_kinematics(float theta1, float theta2, float theta3, float theta4, float xyzpitch[4]){
+    xyzpitch[0] = DISTANCE_LINK_4*(cos(theta1)*cos(theta2)*(cos(theta3)*cos(theta4) - sin(theta3)*sin(theta4)) - cos(theta1)*sin(theta2)*(cos(theta3)*sin(theta4) + cos(theta4)*sin(theta3))) + cos(theta1)*cos(theta2)*(DISTANCE_LINK_2 + DISTANCE_LINK_3*cos(theta3)) - DISTANCE_LINK_3*cos(theta1)*sin(theta2)*sin(theta3);
+    xyzpitch[1] = DISTANCE_LINK_4*(cos(theta2)*sin(theta1)*(cos(theta3)*cos(theta4) - sin(theta3)*sin(theta4)) - sin(theta1)*sin(theta2)*(cos(theta3)*sin(theta4) + cos(theta4)*sin(theta3))) + cos(theta2)*sin(theta1)*(DISTANCE_LINK_2 + DISTANCE_LINK_3*cos(theta3)) - DISTANCE_LINK_3*sin(theta1)*sin(theta2)*sin(theta3);
+    xyzpitch[2] = DISTANCE_LINK_1 + sin(theta2)*(DISTANCE_LINK_2 + DISTANCE_LINK_3*cos(theta3)) + DISTANCE_LINK_4*(cos(theta2)*(cos(theta3)*sin(theta4) + cos(theta4)*sin(theta3)) + sin(theta2)*(cos(theta3)*cos(theta4) - sin(theta3)*sin(theta4))) + DISTANCE_LINK_3*cos(theta2)*sin(theta3);
+    
+    float R31 = cos(theta2)*(cos(theta3)*sin(theta4) + cos(theta4)*sin(theta3)) + sin(theta2)*(cos(theta3)*cos(theta4) - sin(theta3)*sin(theta4));
+    float R11 = cos(theta1)*cos(theta2)*(cos(theta3)*cos(theta4) - sin(theta3)*sin(theta4)) - cos(theta1)*sin(theta2)*(cos(theta3)*sin(theta4) + cos(theta4)*sin(theta3));
+    float R21 = cos(theta2)*sin(theta1)*(cos(theta3)*cos(theta4) - sin(theta3)*sin(theta4)) - sin(theta1)*sin(theta2)*(cos(theta3)*sin(theta4) + cos(theta4)*sin(theta3));
+ 
+    xyzpitch[3] = atanf(-R31/(sqrtf(powf(R11,2) + powf(R21,2))));
+    /*
     float alpha[5] = {0, M_PI/2, 0, 0, 0};
     float a[5] = {0, 0, DISTANCE_LINK_2, DISTANCE_LINK_3, DISTANCE_LINK_4};
     float d[5] = {DISTANCE_LINK_1, 0, 0, 0, 0};
@@ -68,9 +78,11 @@ void forward_kinematics(float theta1, float theta2, float theta3, float theta4, 
     xyzpitch[1] = T05[1][3];
     xyzpitch[2] = T05[2][3];
     xyzpitch[3] = atanf(-T05[2][0]/(sqrtf(powf(T05[0][0],2) + powf(T05[1][0],2))));
+    */
 }
 
 void jacobian_function(float theta1, float theta2, float theta3, float theta4, float jacobian[MATRIX_ROW_SIZE][MATRIX_COL_SIZE]){
+    
     float s1 = sin(theta1);
     float s2 = sin(theta2);
     float s3 = sin(theta3);
@@ -83,12 +95,15 @@ void jacobian_function(float theta1, float theta2, float theta3, float theta4, f
     float J11 = (-s1*c2)*(DISTANCE_LINK_4*c3*c4 - DISTANCE_LINK_4*s3*s4 + DISTANCE_LINK_3*c3 + DISTANCE_LINK_2) + (s1*s2)*(DISTANCE_LINK_4*s3*c4 + DISTANCE_LINK_4*c3*s4 + DISTANCE_LINK_3*s3);
     float J12 = (-s2*c1)*(DISTANCE_LINK_4*c3*c4 - DISTANCE_LINK_4*s3*s4 + DISTANCE_LINK_3*c3 + DISTANCE_LINK_2) - (c1*c2)*(DISTANCE_LINK_4*s3*c4 + DISTANCE_LINK_4*c3*s4 + DISTANCE_LINK_3*s3);
     float J13 = (c1*c2)*(-DISTANCE_LINK_4*s3*c4 - DISTANCE_LINK_4*c3*s4 - DISTANCE_LINK_3*s3) + (-c1*s2)*(DISTANCE_LINK_4*c3*c4 - DISTANCE_LINK_4*s3*s4 + DISTANCE_LINK_3*c3);
+
     float J14 = (c1*c2)*(-DISTANCE_LINK_4*c3*s4 - DISTANCE_LINK_4*s3*c4) + (-c1*s2)*(-DISTANCE_LINK_4*s3*s4 + DISTANCE_LINK_4*c3*c4);
     float J21 = (c1*c2)*(DISTANCE_LINK_4*c3*c4 - DISTANCE_LINK_4*s3*s4 + DISTANCE_LINK_3*c3 + DISTANCE_LINK_2) - (c1*s2)*(DISTANCE_LINK_4*s3*c4 + DISTANCE_LINK_4*c3*s4 + DISTANCE_LINK_3*s3);
     float J22 = (-s1*s2)*(DISTANCE_LINK_4*c3*c4 - DISTANCE_LINK_4*s3*s4 + DISTANCE_LINK_3*c3 + DISTANCE_LINK_2) - (s1*c2)*(DISTANCE_LINK_4*s3*c4 + DISTANCE_LINK_4*c3*s4 + DISTANCE_LINK_3*s3);
+
     float J23 = (s1*c2)*(-DISTANCE_LINK_4*s3*c4 - DISTANCE_LINK_4*c3*s4 - DISTANCE_LINK_3*s3) - (s1*s2)*(DISTANCE_LINK_4*c3*c4 - DISTANCE_LINK_4*s3*s4 + DISTANCE_LINK_3*c3);
     float J24 = (s1*c2)*(-DISTANCE_LINK_4*c3*s4 - DISTANCE_LINK_4*s3*c4) - (s1*s2)*(-DISTANCE_LINK_4*s3*s4 + DISTANCE_LINK_4*c3*c4);
     float J31 = 0;
+
     float J32 = c2*(DISTANCE_LINK_4*c3*c4 - DISTANCE_LINK_4*s3*s4 + DISTANCE_LINK_3*c3 + DISTANCE_LINK_2) - s2*(DISTANCE_LINK_4*s3*c4 + DISTANCE_LINK_4*c3*s4 + DISTANCE_LINK_3*s3);
     float J33 = s2*(-DISTANCE_LINK_4*s3*c4 - DISTANCE_LINK_4*c3*s4 - DISTANCE_LINK_3*s3) + c2*(DISTANCE_LINK_4*c3*c4 - DISTANCE_LINK_4*s3*s4 + DISTANCE_LINK_3*c3);
     float J34 = s2*(-DISTANCE_LINK_4*c3*s4 - DISTANCE_LINK_4*s3*c4) + c2*(-DISTANCE_LINK_4*s3*s4 + DISTANCE_LINK_4*c3*c4);
@@ -193,6 +208,7 @@ void robot_move(float xyzpitch[4]){
     initial_angle[3] = theta4;
 
     while(norm(position_difference) >= error){
+        uint64_t start = time_us_64();
         //position_final = position_initial - position_difference
         add_subtract_matrix(position_final, position_initial, position_difference, false);
 
@@ -200,7 +216,7 @@ void robot_move(float xyzpitch[4]){
         calculate_velocity(position_difference, velocity, speed);
 
         //Exit if jacobian_matrix is not invertible
-        if(inverse(jacobian_matrix, jacobian_inverse) == 0){
+        if(inverse(4, jacobian_matrix, jacobian_inverse) == 0){
             error = 4000;
         }
 
@@ -214,14 +230,16 @@ void robot_move(float xyzpitch[4]){
         initial_angle[3] = delta_angle[3][0]*time_step + initial_angle[3];
 
         //Send new angles to motors
-        duty_cycle_set(initial_angle[0], initial_angle[1], initial_angle[2], initial_angle[3], 1);
-        motor_move(slice_motors, chan_motors);
+       // duty_cycle_set(initial_angle[0], initial_angle[1], initial_angle[2], initial_angle[3], 1);
+        //motor_move(slice_motors, chan_motors);
 
         //Calculate new position and jacobian
         forward_kinematics(initial_angle[0], initial_angle[1], initial_angle[2], initial_angle[3], position_initial);
         jacobian_function(initial_angle[0], initial_angle[1], initial_angle[2], initial_angle[3], jacobian_matrix);
 
         //End robot_move if count goes too high
+        uint64_t end = time_us_64();
+        printf("%llu \n", end - start);
         ++count;
         if(count >= norm(total_distance)/(speed*time_step)){error = 4000;}
     }

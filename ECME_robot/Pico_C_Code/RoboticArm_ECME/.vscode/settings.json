@@ -38,7 +38,7 @@
     "raspberry-pi-pico.ninjaPath": "${HOME}/.pico-sdk/ninja/v1.12.1/ninja",
     "raspberry-pi-pico.python3Path": "${HOME}/.pico-sdk/python/3.12.1/python.exe",
     "files.associations": {
-        "multicore.h": "c",
-        "gpio.h": "c"
+        "cmath": "c",
+        "math.h": "c"
     }
 }

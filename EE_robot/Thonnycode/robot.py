@@ -17,7 +17,6 @@ pwm4 = PWM(Pin(19))
 pwm5 = PWM(Pin(17))
 
 def transform_matrix(alpha, a, d, theta):
-    time1 = ticks_us()
     ctheta = math.cos(theta)
     calpha = math.cos(alpha)
     stheta = math.sin(theta)
@@ -31,8 +30,6 @@ def transform_matrix(alpha, a, d, theta):
                   T2,
                   T3,
                   T4])
-    time2 = ticks_us()
-    print((time2 - time1))
     return T
 
 def forward_kinematics(theta1,theta2,theta3,theta4):
@@ -157,6 +154,7 @@ def robot_move(x,y,z,pitch,config):
     speed = 25
     
     while np.linalg.norm(x_difference) >= 0.1:
+        start = ticks_us()
         x_difference = x_final - x_initial
         
         velocity = (x_difference/np.linalg.norm(x_difference))*speed
@@ -175,6 +173,8 @@ def robot_move(x,y,z,pitch,config):
         x_initial = forward_kinematics(new_angle[0][0],new_angle[1][0],new_angle[2][0],new_angle[3][0])
         jacobian_matrix = jacobian(new_angle[0][0],new_angle[1][0],new_angle[2][0],new_angle[3][0])
         
+        end = ticks_us()
+        print(end-start)
         count = count + 1
         if count >= (np.linalg.norm(total_distance)/(speed*time_step)): #count - 100 if doing auto control
             break
