@@ -45,7 +45,7 @@ void forward_kinematics(float theta1, float theta2, float theta3, float theta4, 
     float R11 = cos(theta1)*cos(theta2)*(cos(theta3)*cos(theta4) - sin(theta3)*sin(theta4)) - cos(theta1)*sin(theta2)*(cos(theta3)*sin(theta4) + cos(theta4)*sin(theta3));
     float R21 = cos(theta2)*sin(theta1)*(cos(theta3)*cos(theta4) - sin(theta3)*sin(theta4)) - sin(theta1)*sin(theta2)*(cos(theta3)*sin(theta4) + cos(theta4)*sin(theta3));
  
-    xyzpitch[3] = atanf(-R31/(sqrtf(powf(R11,2) + powf(R21,2))));
+    //xyzpitch[3] = atanf(-R31/(sqrtf(powf(R11,2) + powf(R21,2))));
     /*
     float alpha[5] = {0, M_PI/2, 0, 0, 0};
     float a[5] = {0, 0, DISTANCE_LINK_2, DISTANCE_LINK_3, DISTANCE_LINK_4};

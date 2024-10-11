@@ -184,6 +184,7 @@ add_library(LibModule
             Src/adc.c
             Src/robot_modes.c
             Src/I2C.c
+            Src/quaterionion.c
             Inc/main.h)
 
 target_include_directories(LibModule PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Inc)

@@ -198,6 +198,9 @@ add_library(LibModule
             Src/adc.c
             Src/robot_modes.c
             Src/I2C.c
+            Src/quaternion.C
+            Src/UART.c
+            Src/SPI.c
             Inc/main.h)
 
 target_include_directories(LibModule PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Inc)
@@ -226,6 +229,7 @@ target_link_libraries(LibModule
                 hardware_gpio   
                 hardware_pwm    
                 hardware_adc
+                hardware_spi
                 pico_multicore)
 
 # Add the standard include files to the build
@@ -239,6 +243,7 @@ target_link_libraries(RoboticArm_ECME
         hardware_i2c
         hardware_gpio hardware_pwm
         hardware_adc
+        hardware_spi
         LibModule
         pico_multicore
         )

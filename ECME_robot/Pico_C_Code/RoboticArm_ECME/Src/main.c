@@ -11,6 +11,7 @@
 #include "timer.h"
 #include "main.h"
 #include "I2C.h"
+#include "SPI.h"
 
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
@@ -34,6 +35,7 @@ int main()
     interrupt_initialization();
     initialize_auto_manual_pin();
     initialize_start_auto_mode_pin();
+    SPI_initialization();
 
     //Positions robot in initial position and lets pico know where robot is
     set_zero_position();
@@ -60,9 +62,12 @@ int main()
     xyzpitch[2] = STARTING_X + 0.03;
     xyzpitch[3] = 0;
     xyzpitch[4] = 0;
+
+    float value;
     
     while (true) {
-
+    
+        /*
         xyzpitch[0] = STARTING_X + 0.03 + xyzpitch[0];
         xyzpitch[1] = STARTING_Y + 0.03 + xyzpitch[1];
         xyzpitch[2] = STARTING_X + 0.03 + xyzpitch[2];
@@ -70,7 +75,7 @@ int main()
         xyzpitch[4] = 0;
 
         robot_move(xyzpitch);
-    
+        */
         /*
         xyzpitch[0] = STARTING_X;
         xyzpitch[1] = STARTING_Y;
