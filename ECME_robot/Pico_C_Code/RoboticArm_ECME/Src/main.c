@@ -61,37 +61,42 @@ int main()
 
     while (true) {
 
-        position[0] = STARTING_X - 3;
-        position[1] = STARTING_Y - 3;
+        position[0] = STARTING_X -3;
+        position[1] = STARTING_Y + 4;
         position[2] = STARTING_Z + 3;
-        //position[3] = 0;
-        //position[4] = 0;
+        position[3] = 0.3;
+        position[4] = 0.5;
 
         start = time_us_64();
-        robot_move(3, position);
+        robot_move(5, position);
         end = time_us_64();
         printf("time_to_end: %llu \n", end - start);
 
-        //forward_kinematics(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], position);
+        forward_kinematics(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], position);
         
-        //printf("X: %f \n", position[0]);
-        //printf("Y: %f \n", position[1]);
-        //printf("Z: %f \n", position[2]);
-
+        printf("Xe: %f \n", position[0]);
+        printf("Ye: %f \n", position[1]);
+        printf("Ze: %f \n", position[2]);
+        printf("PITCHe: %f \n", position[3]);
+        printf("YAWe: %f \n\n", position[4]);
         
         position[0] = STARTING_X;
         position[1] = STARTING_Y;
         position[2] = STARTING_Z;
+        position[3] = 0;
+        position[4] = 0;
 
         start = time_us_64();
-        robot_move(3, position);
+        robot_move(5, position);
         end = time_us_64();
         printf("time_to_initial: %llu \n", end - start);
 
-        //forward_kinematics(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], position);
-        //printf("X: %f \n", position[0]);
-        //printf("Y: %f \n", position[1]);
-        //printf("Z: %f \n", position[2]);
+        forward_kinematics(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], position);
+        printf("Xi: %f \n", position[0]);
+        printf("Yi: %f \n", position[1]);
+        printf("Zi: %f \n", position[2]);
+        printf("PITCHi: %f \n", position[3]);
+        printf("YAWi: %f \n\n", position[4]);
 
         /*
         jacobian_function(0,M_PI/2,-M_PI/2,0,0,0,jacobian);

@@ -11,7 +11,7 @@
 #define DISTANCE_LINK_5 12
 #define DISTANCE_LINK_6 14
 
-#define POSITION_SIZE 3
+#define POSITION_SIZE 5
 
 extern float position[POSITION_SIZE];
 extern volatile bool claw_position;

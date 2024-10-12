@@ -32,7 +32,7 @@ int inverse(int matrix_size, float mat[matrix_size][matrix_size], float inverse[
                 }
             }
             if (!swapped) {
-                printf("Matrix is singular, cannot find its inverse.\n");
+                //printf("Matrix is singular, cannot find its inverse.\n");
                 return 0;
             }
         }
