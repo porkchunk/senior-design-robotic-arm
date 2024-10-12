@@ -185,9 +185,9 @@ void robot_move(float xyzpitch[4]){
     float velocity[4][1];
     float new_angle[4];
     float delta_angle[4][1];
-    float time_step = 0.01;
+    float time_step = 0.01; //make 0.00033
     float error = 0.01;
-    float speed = 0.5;
+    float speed = 10;
 
     uint32_t count = 0;
 
@@ -208,7 +208,7 @@ void robot_move(float xyzpitch[4]){
     initial_angle[3] = theta4;
 
     while(norm(position_difference) >= error){
-        //uint64_t start = time_us_64();
+        uint64_t start = time_us_64();
         //position_final = position_initial - position_difference
         add_subtract_matrix(position_final, position_initial, position_difference, false);
 
@@ -216,9 +216,7 @@ void robot_move(float xyzpitch[4]){
         calculate_velocity(position_difference, velocity, speed);
 
         //Exit if jacobian_matrix is not invertible
-        if(inverse(4, jacobian_matrix, jacobian_inverse) == 0){
-            error = 4000;
-        }
+        inverse(4, jacobian_matrix, jacobian_inverse);
 
         //Calculate delta_angle from delta_angle = J^{-1} * Velocity
         multiply_matrices_angle(jacobian_inverse, velocity, delta_angle);
@@ -238,8 +236,8 @@ void robot_move(float xyzpitch[4]){
         jacobian_function(initial_angle[0], initial_angle[1], initial_angle[2], initial_angle[3], jacobian_matrix);
 
         //End robot_move if count goes too high
-        //uint64_t end = time_us_64();
-        //printf("%llu \n", end - start);
+        uint64_t end = time_us_64();
+        printf("%llu \n", end - start);
         ++count;
         if(count >= norm(total_distance)/(speed*time_step)){error = 4000;}
     }

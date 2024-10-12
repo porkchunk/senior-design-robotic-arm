@@ -9,12 +9,11 @@
 
 void multiply_matrices(int m, int n, int p, float first[][n], float second[][p], float result[][p]);
 void display(int m, int n, float result[m][n]);
-void add_subtract_matrix(float matrix1[5],float matrix2[5],float result_matrix[5], bool add);
-float norm(float position_difference[5]);
-void calculate_velocity(float position_difference[5],float velocity[5][1],float speed);
-void transpose(float matrix[5][6], float transposed_matrix[6][5]);
-void display_transpose_and_pseudo_inverse(float result[MATRIX_COL_SIZE][MATRIX_ROW_SIZE]);
-void pseudo_inverse(float matrix[MATRIX_ROW_SIZE][MATRIX_COL_SIZE], float pseudo_inverse[MATRIX_COL_SIZE][MATRIX_ROW_SIZE]);
+void add_subtract_matrix(int size, float matrix1[size],float matrix2[size],float result_matrix[size], bool add);
+float norm(int size, float position_difference[size]);
+void calculate_velocity(int size, float position_difference[size],float velocity[size][1],float speed);
+void transpose(int m, int n, float matrix[m][n], float transposed_matrix[n][m]);
+void pseudo_inverse(int m, int n, float matrix[m][n], float pseudo_inverse[n][m]);
 int inverse(int matrix_size, float mat[matrix_size][matrix_size], float inverse[matrix_size][matrix_size]);
 
 #endif

@@ -50,55 +50,61 @@ int main()
     float jacobian[5][6];
     float jacobian_inverse[6][5];
 
-    float theta1 = M_PI;
-    float theta2 = M_PI/2;
-    float theta3 = -M_PI/2;
-    float theta4 = -M_PI;
-    float theta5 = M_PI/2;
-    float theta6 = 0;
-
-    xyzpitch[0] = STARTING_X + 0.03;
-    xyzpitch[1] = STARTING_Y + 0.03;
-    xyzpitch[2] = STARTING_X + 0.03;
-    xyzpitch[3] = 0;
-    xyzpitch[4] = 0;
-
     float value;
-    
-    while (true) {
-    
-        /*
-        xyzpitch[0] = STARTING_X + 0.03 + xyzpitch[0];
-        xyzpitch[1] = STARTING_Y + 0.03 + xyzpitch[1];
-        xyzpitch[2] = STARTING_X + 0.03 + xyzpitch[2];
-        xyzpitch[3] = 0;
-        xyzpitch[4] = 0;
 
-        robot_move(xyzpitch);
-        */
-        /*
-        xyzpitch[0] = STARTING_X;
-        xyzpitch[1] = STARTING_Y;
-        xyzpitch[2] = STARTING_Z;
-        xyzpitch[3] = STARTING_PITCH;
-        xyzpitch[4] = STARTING_YAW;
+    theta[0] = 0;
+    theta[1] = M_PI/2;
+    theta[2] = -M_PI/2;
+    theta[3] = 0;
+    theta[4] = 0;
+    theta[5] = 0;
+
+    while (true) {
+
+        position[0] = STARTING_X - 3;
+        position[1] = STARTING_Y - 3;
+        position[2] = STARTING_Z + 3;
+        //position[3] = 0;
+        //position[4] = 0;
 
         start = time_us_64();
-        robot_move(xyzpitch);
+        robot_move(3, position);
         end = time_us_64();
-        printf("%llu \n", end - start);
+        printf("time_to_end: %llu \n", end - start);
+
+        //forward_kinematics(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], position);
+        
+        //printf("X: %f \n", position[0]);
+        //printf("Y: %f \n", position[1]);
+        //printf("Z: %f \n", position[2]);
+
+        
+        position[0] = STARTING_X;
+        position[1] = STARTING_Y;
+        position[2] = STARTING_Z;
+
+        start = time_us_64();
+        robot_move(3, position);
+        end = time_us_64();
+        printf("time_to_initial: %llu \n", end - start);
+
+        //forward_kinematics(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], position);
+        //printf("X: %f \n", position[0]);
+        //printf("Y: %f \n", position[1]);
+        //printf("Z: %f \n", position[2]);
+
         /*
         jacobian_function(0,M_PI/2,-M_PI/2,0,0,0,jacobian);
         start = time_us_64();
         inverse(jacobian, jacobian_inverse);
         end = time_us_64();
         
-        printf("X: %0.2f \n", xyzpitch[0]);
-        printf("Y: %0.2f \n", xyzpitch[1]);
-        printf("Z: %0.2f \n", xyzpitch[2]);        
-        printf("ROLL: %0.2f \n", xyzpitch[3]);
-        printf("PITCH: %0.2f \n", xyzpitch[4]);
-        printf("YAW: %0.2f \n", xyzpitch[5]);
+        printf("X: %0.2f \n", position[0]);
+        printf("Y: %0.2f \n", position[1]);
+        printf("Z: %0.2f \n", position[2]);        
+        printf("ROLL: %0.2f \n", position[3]);
+        printf("PITCH: %0.2f \n", position[4]);
+        printf("YAW: %0.2f \n", position[5]);
         
         printf("time: %llu \n", end - start);
         */

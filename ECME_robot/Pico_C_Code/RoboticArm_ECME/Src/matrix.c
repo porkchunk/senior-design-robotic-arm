@@ -64,9 +64,9 @@ int inverse(int matrix_size, float mat[matrix_size][matrix_size], float inverse[
     return 1;
 }
 
-void transpose(float matrix[5][6], float transposed_matrix[6][5]){
-    for(int i=0;i<6;++i){
-        for(int j=0;j<5;++j){
+void transpose(int m, int n, float matrix[m][n], float transposed_matrix[n][m]){
+    for(int i=0;i<n;++i){
+        for(int j=0;j<m;++j){
             transposed_matrix[i][j] = matrix[j][i];
         }
     }
@@ -90,48 +90,34 @@ void multiply_matrices(int m, int n, int p, float first[][n], float second[][p],
    }
 }
 
-// function to multiply 6x5 and 5x1 matrix
-void multiply_matrices_angle(float first[6][5],float second[5][1],float result[6][1]) {
-
-   // Initializing elements of matrix mult to 0.
-   for (int i = 0; i < 6; ++i) {
-      for (int j = 0; j < 1; ++j) {
-         result[i][j] = 0;
-      }
-   }
-
-   // Multiplying first and second matrices and storing it in result
-   for (int i = 0; i < 6; ++i) {
-      for (int j = 0; j < 1; ++j) {
-         for (int k = 0; k < 5; ++k) {
-            result[i][j] += first[i][k] * second[k][j];
-         }
-      }
-   }
-}
-
-void add_subtract_matrix(float matrix1[5],float matrix2[5],float result_matrix[5], bool add){
+void add_subtract_matrix(int size, float matrix1[size],float matrix2[size],float result_matrix[size], bool add){
     if(add == true){
-        for(int i=0; i<5; ++i){
+        for(int i=0; i<size; ++i){
             result_matrix[i] = matrix1[i] + matrix2[i];
         }
     }
     else{
-        for(int i=0; i<5; ++i){
+        for(int i=0; i<size; ++i){
             result_matrix[i] = matrix1[i] - matrix2[i];
         }
     }
 }
 
-float norm(float position_difference[5]){
-    float norm = 0;
-    norm = sqrtf(powf(position_difference[0], 2) + powf(position_difference[1], 2) + powf(position_difference[2], 2) + powf(position_difference[3], 2) + powf(position_difference[4], 2));
+float norm(int size, float position_difference[size]){
+    float norm_squared = 0;
+    float norm;
+
+    for(int i=0; i<size; ++i){
+        norm_squared = norm_squared + powf(position_difference[i], 2);
+    }    
+    
+    norm = sqrtf(norm_squared);
     return norm;
 }
 
-void calculate_velocity(float position_difference[5],float velocity[5][1],float speed){
-    for(int i=0; i<5; ++i){
-        velocity[i][0] = speed*(position_difference[i]/norm(position_difference));
+void calculate_velocity(int size, float position_difference[size],float velocity[size][1],float speed){
+    for(int i=0; i<size; ++i){
+        velocity[i][0] = speed*(position_difference[i]/norm(size, position_difference));
     }
 }
 
@@ -148,36 +134,23 @@ void display(int m, int n, float result[m][n]) {
    }
 }
 
-//function to display transpose
-void display_transpose_and_pseudo_inverse(float result[MATRIX_COL_SIZE][MATRIX_ROW_SIZE]) {
-
-   printf("\nOutput Matrix:\n");
-   for (int i = 0; i < MATRIX_COL_SIZE; ++i) {
-      for (int j = 0; j < MATRIX_ROW_SIZE; ++j) {
-         printf("%.2f  ", result[i][j]);
-         if (j == MATRIX_ROW_SIZE - 1)
-            printf("\n");
-      }
-   }
-}
-
-void pseudo_inverse(float matrix[MATRIX_ROW_SIZE][MATRIX_COL_SIZE], float pseudo_inverse[MATRIX_COL_SIZE][MATRIX_ROW_SIZE]){
+void pseudo_inverse(int m, int n, float matrix[m][n], float pseudo_inverse[n][m]){
     uint64_t start;
     uint64_t end;
-    float first_term_linearly_surjective[5][5];
-    float first_term_linearly_injective[6][6];
-    float first_term_linearly_surjective_inverse[5][5];
-    float first_term_linearly_injective_inverse[6][6];
-    float matrix_transpose[MATRIX_COL_SIZE][MATRIX_ROW_SIZE];
-    transpose(matrix, matrix_transpose);
-    multiply_matrices(5, 6, 5, matrix, matrix_transpose, first_term_linearly_surjective);
+    float first_term_linearly_surjective[m][m];
+    float first_term_linearly_injective[n][n];
+    float first_term_linearly_surjective_inverse[m][m];
+    float first_term_linearly_injective_inverse[n][n];
+    float matrix_transpose[n][m];
+    transpose(m, n, matrix, matrix_transpose);
+    multiply_matrices(m, n, m, matrix, matrix_transpose, first_term_linearly_surjective);
 
-    if(inverse(5, first_term_linearly_surjective, first_term_linearly_surjective_inverse) == 1){
-        multiply_matrices(6, 5, 5, matrix_transpose, first_term_linearly_surjective_inverse, pseudo_inverse);
+    if(inverse(m, first_term_linearly_surjective, first_term_linearly_surjective_inverse) == 1){
+        multiply_matrices(n, m, m, matrix_transpose, first_term_linearly_surjective_inverse, pseudo_inverse);
     }
     else{
-        multiply_matrices(6, 5, 6, matrix_transpose, matrix, first_term_linearly_injective);
-        inverse(6, first_term_linearly_injective, first_term_linearly_injective_inverse);
-        multiply_matrices(5, 6, 5, first_term_linearly_injective_inverse, matrix_transpose, pseudo_inverse);
+        multiply_matrices(n, m, n, matrix_transpose, matrix, first_term_linearly_injective);
+        inverse(n, first_term_linearly_injective, first_term_linearly_injective_inverse);
+        multiply_matrices(m, n, m, first_term_linearly_injective_inverse, matrix_transpose, pseudo_inverse);
     }
 }

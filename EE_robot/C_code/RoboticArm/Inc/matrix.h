@@ -13,5 +13,7 @@ int inverse(int matrix_size, float mat[matrix_size][matrix_size], float inverse[
 void add_subtract_matrix(float matrix1[4],float matrix2[4],float result_matrix[4], bool add);
 float norm(float position_difference[4]);
 void calculate_velocity(float position_difference[4],float velocity[4][1],float speed);
+void transpose(int m, int n, float matrix[m][n], float transposed_matrix[n][m]);
+void pseudo_inverse(float matrix[4][4], float pseudo_inverse[4][4]);
 
 #endif

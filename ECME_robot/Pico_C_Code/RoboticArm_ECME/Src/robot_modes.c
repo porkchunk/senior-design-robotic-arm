@@ -28,9 +28,9 @@ void initialize_auto_manual_pin(){
 }
 
 void manual_mode(){
-    diff_x = xyzpitch[0];
-    diff_y = xyzpitch[1]; 
-    diff_z = xyzpitch[2];
+    diff_x = position[0];
+    diff_y = position[1]; 
+    diff_z = position[2];
 
     //Read y-axis input for joystick
     adc_select_input(0);
@@ -62,14 +62,14 @@ void manual_mode(){
         countX -= 0.03;
     }
     
-    xyzpitch[0] = STARTING_X + countX;
-    xyzpitch[1] = STARTING_Y + countY;
-    xyzpitch[2] = STARTING_Z + countZ;
-    xyzpitch[3] = STARTING_PITCH;
+    position[0] = STARTING_X + countX;
+    position[1] = STARTING_Y + countY;
+    position[2] = STARTING_Z + countZ;
+    position[3] = STARTING_PITCH;
     
     //If joystick moved, move robot
-    if(xyzpitch[0] != diff_x || xyzpitch[1] != diff_y || xyzpitch[2] != diff_z){
-        //robot_move(xyzpitch);
+    if(position[0] != diff_x || position[1] != diff_y || position[2] != diff_z){
+        //robot_move(position);
     }
 
     claw_move();
@@ -79,11 +79,11 @@ void automatic_mode()
 { 
     //If left joystick button is pressed run auto mode
     if(gpio_get(AUTO_START_SWITCH) == false){
-        xyzpitch[0] = STARTING_X + 3;
-        xyzpitch[1] = STARTING_Y - 9;
-        xyzpitch[2] = STARTING_Z - 9;
-        xyzpitch[3] = STARTING_PITCH;
-        //robot_move(xyzpitch);
+        position[0] = STARTING_X + 3;
+        position[1] = STARTING_Y - 9;
+        position[2] = STARTING_Z - 9;
+        position[3] = STARTING_PITCH;
+        //robot_move(position);
 
         claw_position = true;
         claw_move();

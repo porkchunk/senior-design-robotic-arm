@@ -63,6 +63,35 @@ int inverse(int matrix_size, float mat[matrix_size][matrix_size], float inverse[
     return 1;
 }
 
+void pseudo_inverse(float matrix[4][4], float pseudo_inverse[4][4]){
+    uint64_t start;
+    uint64_t end;
+    float first_term_linearly_surjective[4][4];
+    float first_term_linearly_injective[4][4];
+    float first_term_linearly_surjective_inverse[4][4];
+    float first_term_linearly_injective_inverse[4][4];
+    float matrix_transpose[4][4];
+    transpose(4, 4, matrix, matrix_transpose);
+    multiply_matrices(matrix, matrix_transpose, first_term_linearly_surjective);
+
+    if(inverse(4, first_term_linearly_surjective, first_term_linearly_surjective_inverse) == 1){
+        multiply_matrices(matrix_transpose, first_term_linearly_surjective_inverse, pseudo_inverse);
+    }
+    else{
+        multiply_matrices(matrix_transpose, matrix, first_term_linearly_injective);
+        inverse(4, first_term_linearly_injective, first_term_linearly_injective_inverse);
+        multiply_matrices(first_term_linearly_injective_inverse, matrix_transpose, pseudo_inverse);
+    }
+}
+
+void transpose(int m, int n, float matrix[m][n], float transposed_matrix[n][m]){
+    for(int i=0;i<n;++i){
+        for(int j=0;j<m;++j){
+            transposed_matrix[i][j] = matrix[j][i];
+        }
+    }
+}
+
 // function to multiply two matrices 4x4 and 4x4
 void multiply_matrices(float first[MATRIX_ROW_SIZE][MATRIX_COL_SIZE],float second[MATRIX_ROW_SIZE][MATRIX_COL_SIZE],float result[MATRIX_ROW_SIZE][MATRIX_COL_SIZE]) {
 

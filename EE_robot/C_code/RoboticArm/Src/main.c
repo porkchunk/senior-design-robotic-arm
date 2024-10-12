@@ -47,7 +47,7 @@ int main()
 
         xyzpitch[0] = STARTING_X + 0.03;
         xyzpitch[1] = STARTING_Y + 0.03;
-        xyzpitch[2] = STARTING_Z + -0.03;
+        xyzpitch[2] = STARTING_Z + 0.03;
         xyzpitch[3] = 0;
 
         start = time_us_64();
@@ -61,14 +61,14 @@ int main()
 
         forward_kinematics(theta1, theta2, theta3, theta4, xyzpitch);
 
-        printf("X: %0.4f \n", xyzpitch[0]);
-        printf("Y: %0.4f \n", xyzpitch[1]);
-        printf("Z: %0.4f \n", xyzpitch[2]);
-        printf("PITCH: %0.4f \n\n", xyzpitch[3]);
+        //printf("X: %0.4f \n", xyzpitch[0]);
+        //printf("Y: %0.4f \n", xyzpitch[1]);
+        //printf("Z: %0.4f \n", xyzpitch[2]);
+        //printf("PITCH: %0.4f \n\n", xyzpitch[3]);
 
-        sleep_ms(1000);
+        sleep_ms(50);
 
-        printf("%llu \n", end - start);
+        //printf("%llu \n", end - start);
         
         xyzpitch[0] = STARTING_X;
         xyzpitch[1] = STARTING_Y;
@@ -77,9 +77,6 @@ int main()
 
         robot_move(xyzpitch);
 
-        
-
-        sleep_ms(500);
         /*
         if(gpio_get(AUTO_MANUAL_SWITCH_PIN) == true){
             manual_mode();
