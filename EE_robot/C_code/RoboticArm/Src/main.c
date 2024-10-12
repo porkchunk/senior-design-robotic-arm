@@ -36,6 +36,7 @@ int main()
 
     //Positions robot in initial position and lets pico know where robot is
     set_zero_position();
+    set_initial_position();
 
     uint64_t start;
     uint64_t end;
@@ -44,11 +45,11 @@ int main()
     float jacobian_inverse[4][4];
     
     while (true) {
-
-        xyzpitch[0] = STARTING_X -9;
+        /*
+        xyzpitch[0] = STARTING_X - 7;
         xyzpitch[1] = STARTING_Y;
-        xyzpitch[2] = STARTING_Z - 5;
-        xyzpitch[3] = -0.6;
+        xyzpitch[2] = STARTING_Z;
+        xyzpitch[3] = 0;
 
         start = time_us_64();
         robot_move(xyzpitch);
@@ -66,7 +67,7 @@ int main()
         printf("Z: %0.4f \n", xyzpitch[2]);
         printf("PITCH: %0.4f \n\n", xyzpitch[3]);
 
-        sleep_ms(50);
+        sleep_ms(500);
 
         printf("%llu \n", end - start);
         
@@ -77,13 +78,16 @@ int main()
 
         robot_move(xyzpitch);
 
-        /*
+        sleep_ms(500);
+        */
+        
         if(gpio_get(AUTO_MANUAL_SWITCH_PIN) == true){
             manual_mode();
         }
         else{
             automatic_mode();
+            
         }
-        */
+        
     }
 }

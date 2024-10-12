@@ -185,9 +185,9 @@ void robot_move(float xyzpitch[4]){
     float velocity[4][1];
     float new_angle[4];
     float delta_angle[4][1];
-    float time_step = 0.00033; //make 0.00033
+    float time_step = 0.01; //make 0.00033
     float error = 0.01;
-    float speed = 10;
+    float speed = 0.5;
 
     uint32_t count = 0;
 

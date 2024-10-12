@@ -9,7 +9,7 @@
 #define DISTANCE_LINK_1 9.5
 #define DISTANCE_LINK_2 10.4 
 #define DISTANCE_LINK_3 8.75
-#define DISTANCE_LINK_4 16.25
+#define DISTANCE_LINK_4 17 //16.25 previous
 
 extern float xyzpitch[4];
 extern volatile bool claw_position;

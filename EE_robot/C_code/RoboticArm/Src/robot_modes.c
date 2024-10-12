@@ -3,6 +3,7 @@
 #include "robot_commands.h"
 #include "hardware/adc.h"
 #include "pwm.h"
+#include <math.h>
 #include "pico/stdlib.h"
 
 float diff_x = 0;
@@ -32,45 +33,92 @@ void manual_mode(){
     diff_y = xyzpitch[1]; 
     diff_z = xyzpitch[2];
 
+    float current_position[4];
+
     //Read y-axis input for joystick
     adc_select_input(0);
     result = adc_read();
     if(result < 1500){
-        countY += 0.03;
+        xyzpitch[1] = xyzpitch[1] + 0.03;
     }
     if(result > 2500){
-        countY -= 0.03;
+        xyzpitch[1] = xyzpitch[1] + -0.03;
     }
 
     //Read z-axis input for joystick
     adc_select_input(1);
     result = adc_read();
     if(result < 1900){
-        countZ += 0.02;
+        xyzpitch[2] = xyzpitch[2] + 0.03;
     }
     if(result > 2100){
-        countZ -= 0.02;
+        xyzpitch[2] = xyzpitch[2] + -0.03;
     }
 
     //Read x-axis input for joystick
     adc_select_input(2);
     result = adc_read();
     if(result < 1500){
-        countX += 0.03;
+        xyzpitch[0] = xyzpitch[0] + 0.03;
     }
     if(result > 2500){
-        countX -= 0.03;
+        xyzpitch[0] = xyzpitch[0] + -0.03;
     }
+
+    float theta1 = map_function(20*duty_cycle_motors.motor1, 0.5, 2.5, -M_PI/2, M_PI/2);
+    float theta2 = map_function(20*duty_cycle_motors.motor2, 0.5, 2.5, M_PI, 0);
+    float theta3 = map_function(20*duty_cycle_motors.motor3, 0.56, 2.06, (-3*M_PI)/4, 0);
+    float theta4 = map_function(20*duty_cycle_motors.motor4, 0.5, 2.5, -M_PI/2, M_PI/2);
     
-    xyzpitch[0] = STARTING_X + countX;
-    xyzpitch[1] = STARTING_Y + countY;
-    xyzpitch[2] = STARTING_Z + countZ;
-    xyzpitch[3] = STARTING_PITCH;
-    
-    //If joystick moved, move robot
-    if(xyzpitch[0] != diff_x || xyzpitch[1] != diff_y || xyzpitch[2] != diff_z){
+    bool did_robot_move = xyzpitch[0] != diff_x || xyzpitch[1] != diff_y || xyzpitch[2] != diff_z;
+    bool is_robot_in_boundary = ((powf(xyzpitch[0],2) + powf(xyzpitch[1],2) + powf(xyzpitch[2] - 19.9,2) - 900) < 0) && xyzpitch[2] > 7 && xyzpitch[2] < 23 && (xyzpitch[0] > 3);
+
+    bool x_lower = xyzpitch[0] < diff_x;
+    bool y_lower = xyzpitch[1] < diff_y;
+    bool z_lower = xyzpitch[2] < diff_z;
+    bool x_higher = xyzpitch[0] > diff_x;
+    bool y_higher = xyzpitch[1] > diff_y;
+    bool z_higher = xyzpitch[2] > diff_z;
+
+    if(did_robot_move && is_robot_in_boundary){
+        robot_move(xyzpitch); 
+
+        forward_kinematics(theta1, theta2, theta3, theta4, current_position);
+        printf("X: %0.3f\n", current_position[0]);
+        printf("Y: %0.3f\n", current_position[1]);
+        printf("Z: %0.3f\n", current_position[2]);
+        printf("PITCH: %0.3f\n", current_position[3]);
+    }
+    if(!is_robot_in_boundary){
+        if(x_lower){
+            xyzpitch[0] = xyzpitch[0]/0.9;
+        }
+        if(x_higher){
+            xyzpitch[0] = xyzpitch[0]/1.1;
+        }
+        if(y_lower){
+            xyzpitch[1] = xyzpitch[1]/0.9;
+        }
+        if(y_higher){
+            xyzpitch[1] = xyzpitch[1]/1.1;
+        }
+        if(z_lower){
+            xyzpitch[2] = xyzpitch[2]/0.9;
+        }
+        if(z_higher){
+            xyzpitch[2] = xyzpitch[2]/1.1;
+        }
+        
         robot_move(xyzpitch);
+
+        forward_kinematics(theta1, theta2, theta3, theta4, current_position);
+        printf("X: %0.3f\n", current_position[0]);
+        printf("Y: %0.3f\n", current_position[1]);
+        printf("Z: %0.3f\n", current_position[2]);
+        printf("PITCH: %0.3f\n", current_position[3]);
     }
+
+
 
     claw_move();
 }
