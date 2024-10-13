@@ -16,6 +16,8 @@ void motor_move(){
     pwm_set_freq_duty(slice_motors[MOTOR_2], chan_motors[MOTOR_2], PWM_FREQ, duty_cycle_motors.motor2);
     pwm_set_freq_duty(slice_motors[MOTOR_3], chan_motors[MOTOR_3], PWM_FREQ, duty_cycle_motors.motor3);
     pwm_set_freq_duty(slice_motors[MOTOR_4], chan_motors[MOTOR_4], PWM_FREQ, duty_cycle_motors.motor4);
+    pwm_set_freq_duty(slice_motors[MOTOR_3], chan_motors[MOTOR_5], PWM_FREQ, duty_cycle_motors.motor3);
+    pwm_set_freq_duty(slice_motors[MOTOR_4], chan_motors[MOTOR_6], PWM_FREQ, duty_cycle_motors.motor4);
 
     pwm_set_enabled(slice_motors[MOTOR_1], true);
     pwm_set_enabled(slice_motors[MOTOR_2], true);

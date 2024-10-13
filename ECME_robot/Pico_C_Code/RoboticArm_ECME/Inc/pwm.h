@@ -15,7 +15,9 @@ struct pwmSignal{
     float motor2;
     float motor3;
     float motor4;
+    float motor5;
     float motor6;
+    float motor7;
 };
 
 extern struct pwmSignal duty_cycle_motors;

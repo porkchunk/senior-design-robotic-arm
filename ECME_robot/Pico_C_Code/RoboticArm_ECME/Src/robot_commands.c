@@ -193,16 +193,16 @@ float map_function(float input, float input_start, float input_end, float output
 
 void claw_move(){
     if(claw_position == true){
-        pwm_set_freq_duty(slice_motors[MOTOR_6], chan_motors[MOTOR_6], PWM_FREQ, 2.15/20);
+        pwm_set_freq_duty(slice_motors[MOTOR_7], chan_motors[MOTOR_7], PWM_FREQ, 2.15/20);
     }
     else{
-        pwm_set_freq_duty(slice_motors[MOTOR_6], chan_motors[MOTOR_6], PWM_FREQ, 1.4/20);
+        pwm_set_freq_duty(slice_motors[MOTOR_7], chan_motors[MOTOR_7], PWM_FREQ, 1.4/20);
     }
-    pwm_set_enabled(slice_motors[MOTOR_6], true);
+    pwm_set_enabled(slice_motors[MOTOR_7], true);
 }
 
 void set_zero_position(){
-    duty_cycle_set(0, M_PI/2, -M_PI/2, 0, 1);
+    //duty_cycle_set(0, M_PI/2, -M_PI/2, 0, 1);
     motor_move(slice_motors, chan_motors);
     claw_move(slice_motors, chan_motors);
 

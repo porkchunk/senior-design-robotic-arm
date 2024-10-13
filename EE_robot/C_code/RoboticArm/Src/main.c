@@ -86,7 +86,6 @@ int main()
         }
         else{
             automatic_mode();
-            
         }
         
     }
