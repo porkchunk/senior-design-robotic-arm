@@ -206,12 +206,10 @@ add_library(LibModule
             Src/matrix.c
             Src/robot_commands.c
             Src/motor.c
-            Src/pwm.c
             Src/timer.c
             Src/interrupts.c
             Src/adc.c
             Src/robot_modes.c
-            Src/I2C.c
             Src/quaternion.C
             Src/UART.c
             Src/SPI.c
@@ -244,7 +242,8 @@ target_link_libraries(LibModule
                 hardware_pwm    
                 hardware_adc
                 hardware_spi
-                pico_multicore)
+                pico_multicore
+                )
 
 # Add the standard include files to the build
 target_include_directories(RoboticArm_ECME PRIVATE
