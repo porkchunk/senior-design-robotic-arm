@@ -4,13 +4,11 @@
 #include "matrix.h"
 #include "robot_commands.h"
 #include "motor.h"
-#include "pwm.h"
 #include "interrupts.h"
 #include "adc.h"
 #include "robot_modes.h"
 #include "timer.h"
 #include "main.h"
-#include "I2C.h"
 #include "SPI.h"
 
 #include "pico/stdlib.h"
@@ -31,7 +29,6 @@ int main()
     stdio_init_all();
     pwm_initialization();
     adc_initialization();
-    I2C_initialization();
     interrupt_initialization();
     initialize_auto_manual_pin();
     initialize_start_auto_mode_pin();
@@ -39,6 +36,7 @@ int main()
 
     //Positions robot in initial position and lets pico know where robot is
     set_zero_position();
+    set_initial_position();
 
     uint64_t start;
     uint64_t end;
@@ -64,8 +62,8 @@ int main()
         position[0] = STARTING_X -3;
         position[1] = STARTING_Y + 4;
         position[2] = STARTING_Z + 3;
-        position[3] = 0.3;
-        position[4] = 0.5;
+        position[3] = 0;
+        position[4] = 0;
 
         start = time_us_64();
         robot_move(5, position);

@@ -32,7 +32,7 @@ int inverse(int matrix_size, float mat[matrix_size][matrix_size], float inverse[
                 }
             }
             if (!swapped) {
-                //printf("Matrix is singular, cannot find its inverse.\n");
+                printf("Matrix is singular, cannot find its inverse.\n");
                 return 0;
             }
         }
@@ -151,6 +151,6 @@ void pseudo_inverse(int m, int n, float matrix[m][n], float pseudo_inverse[n][m]
     else{
         multiply_matrices(n, m, n, matrix_transpose, matrix, first_term_linearly_injective);
         inverse(n, first_term_linearly_injective, first_term_linearly_injective_inverse);
-        multiply_matrices(m, n, m, first_term_linearly_injective_inverse, matrix_transpose, pseudo_inverse);
+        multiply_matrices(n, n, m, first_term_linearly_injective_inverse, matrix_transpose, pseudo_inverse);
     }
 }

@@ -2,7 +2,6 @@
 #include "motor.h"
 #include "pico/stdlib.h"
 #include "main.h"
-#include "pwm.h"
 #include "robot_modes.h"
 #include "pico/multicore.h"
 #include <stdio.h>
@@ -203,7 +202,7 @@ void claw_move(){
 
 void set_zero_position(){
     //duty_cycle_set(0, M_PI/2, -M_PI/2, 0, 1);
-    motor_move(slice_motors, chan_motors);
+    //motor_move(slice_motors, chan_motors);
     claw_move(slice_motors, chan_motors);
 
     sleep_ms(1000);
@@ -263,7 +262,7 @@ void robot_move(int size, float position[size]){
     initial_angle[5] = theta[5];
 
     while(norm(size, position_difference) >= error){
-        //start = time_us_64();
+        start = time_us_64();
         //position_final = position_initial - position_difference
         add_subtract_matrix(size, position_final, position_initial, position_difference, false);
 
@@ -302,11 +301,11 @@ void robot_move(int size, float position[size]){
         //printf("Y: %0.3f \n", position_initial[1]);
         //printf("Z: %0.3f \n\n", position_initial[2]);
 
-        //end = time_us_64();
+        end = time_us_64();
 
         //total_time = total_time + (end - start);
         
-        //printf("%llu \n", end - start);
+        printf("%llu \n", end - start);
         //End robot_move if count goes too high
         ++count;
         if(count >= norm(size, total_distance)/(speed*time_step)){error = 4000;}
