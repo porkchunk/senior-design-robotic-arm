@@ -1,5 +1,5 @@
 #include "SPI.h"
-
+#include "motor.h"
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
@@ -51,6 +51,11 @@ float MCP3008(int chan) {
     cs_deselect();
 
     return val;
+}
 
+void read_encoders(){
+    for(int i=0; i<6; ++i){
+        actual_position[i] = MCP3008(i);
+    }
 }
 

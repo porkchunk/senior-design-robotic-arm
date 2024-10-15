@@ -193,30 +193,15 @@ float map_function(float input, float input_start, float input_end, float output
 }
 
 void set_zero_position(){
-    //duty_cycle_set(0, M_PI/2, -M_PI/2, 0, 1);
-    //motor_move(slice_motors, chan_motors);
-    claw_move(slice_motors, chan_motors);
+    target_position[MOTOR_1] = map_function(theta[0],0,0,0,0);
+    target_position[MOTOR_2] = map_function(theta[1],0,0,0,0);
+    target_position[MOTOR_3] = map_function(theta[2],0,0,0,0);
+    target_position[MOTOR_4] = map_function(theta[3],0,0,0,0);
+    target_position[MOTOR_5] = map_function(theta[4],0,0,0,0);
+    target_position[MOTOR_6] = map_function(theta[5],0,0,0,0);
 
-    sleep_ms(1000);
+    sleep_ms(2000);
 }
-
-void set_initial_position(){
-    theta[0] = 0;
-    theta[1] = M_PI/2;
-    theta[2] = -M_PI/2;
-    theta[3] = 0;
-    theta[4] = 0;
-    theta[5] = 0;
-
-    position[0] = STARTING_X;
-    position[1] = STARTING_Y;
-    position[2] = STARTING_Z;
-    position[3] = STARTING_PITCH;   
-    position[4] = STARTING_YAW;
-
-    //robot_move(position);
-}
-
 
 void robot_move(int size, float position[size]){
     //Convert current duty_cycle to angle based on model of robot
@@ -251,6 +236,10 @@ void robot_move(int size, float position[size]){
         position_final[i] = position[i];
         total_distance[i] = position_final[i] - position_initial[i];
         position_difference[i] = 1;
+    }
+
+    for(int i=0; i<6; ++i){
+
     }
 
     initial_angle[0] = theta[0];

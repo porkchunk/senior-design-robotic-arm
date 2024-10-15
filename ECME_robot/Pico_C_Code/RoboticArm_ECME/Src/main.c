@@ -20,11 +20,15 @@
 #include "pico/multicore.h"
 
 void main_core1(){
-
+    while(true){
+        read_encoders();
+        calculate_PID();
+        motor_move();
+    }
 }
 
 
-void main()
+int main()
 {
     //Sets system clock frequency
     set_sys_clock_khz(SYS_FREQ_KHZ, true);
@@ -42,6 +46,8 @@ void main()
     set_zero_position();
     set_initial_position();
 
+    multicore_launch_core1(main_core1);
+
     uint64_t start;
     uint64_t end;
 
@@ -54,8 +60,7 @@ void main()
 
     float value;
 
-    while (true) {
-        calculate_PID();
+    while (true){
         forward_kinematics(0,M_PI/2,-M_PI/2,0,0,0,position);
         printf("X: %f \n", position[0]);
         printf("Y: %f \n", position[1]);

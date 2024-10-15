@@ -41,7 +41,7 @@ void calculate_PID(){
     }
 }
 
-void motor_move(float theta1, float theta2, float theta3, float theta4, float theta5, float theta6, uint config){
+void motor_move(){
     //Set direction of motors based on error
     for(int i=0; i<6; ++i){
         if(control_signal[i] < 0){
