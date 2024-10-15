@@ -26,6 +26,9 @@
 #define PWM_FREQ 50
 #define PWM_PERIOD_MS 1000*(1/PWM_FREQ)
 
+//add direction pins here
+extern const int PIN_DIRECTION[6];
+
 struct pwmSignal{
     float motor1;
     float motor2;
@@ -37,13 +40,15 @@ struct pwmSignal{
 };
 
 extern struct pwmSignal duty_cycle_motors;
-
 extern uint slice_motors[NUMBER_OF_MOTORS];
 extern uint chan_motors[NUMBER_OF_MOTORS];
+extern float target_position[6];
 
 void pwm_set_freq_duty(uint slice_num, uint chan, uint32_t f, float d);
-void pwm_initialization();
+void motor_initialization();
 void motor_move(float theta1, float theta2, float theta3, float theta4, float theta5, float theta6, uint config);
+void claw_move();
+void calculate_PID();
 //void speed_set(float theta1, float theta2, float theta3, float theta4, float theta5, float theta6, uint config);
 
 

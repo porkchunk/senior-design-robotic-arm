@@ -127,9 +127,16 @@ void display(int m, int n, float result[m][n]) {
    printf("\nOutput Matrix:\n");
    for (int i = 0; i < m; ++i) {
       for (int j = 0; j < n; ++j) {
-         printf("%.2f  ", result[i][j]);
-         if (j == n - 1)
-            printf("\n");
+        if(j < n){
+            if(result[i][j+1] < 0){
+                printf("%.2f ", result[i][j]);
+            }
+            else{
+                printf("%.2f  ", result[i][j]);
+            }
+        }
+        if (j == n - 1)
+        printf("\n");
       }
    }
 }

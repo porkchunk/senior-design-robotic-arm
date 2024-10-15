@@ -19,15 +19,19 @@
 #include "hardware/adc.h"
 #include "pico/multicore.h"
 
+void main_core1(){
 
-int main()
+}
+
+
+void main()
 {
     //Sets system clock frequency
     set_sys_clock_khz(SYS_FREQ_KHZ, true);
 
     //All initializations 
     stdio_init_all();
-    pwm_initialization();
+    motor_initialization();
     adc_initialization();
     interrupt_initialization();
     initialize_auto_manual_pin();
@@ -41,7 +45,7 @@ int main()
     uint64_t start;
     uint64_t end;
 
-    float matrix1[5][6] = {{1,2,3,4,5,3},{1,2,3,4,5,3},{1,2,3,4,5,3},{1,2,3,4,5,3},{1,2,3,4,5,3}};
+    float matrix1[5][6] = {{-1,2,-3,4,5,3},{-1,2,3,4,-5,3},{1,2,3,4,5,3},{1,2,3,4,5,3},{1,2,3,4,5,3}};
     float matrix2[5][6] = {0};
     float matrix_result[6][5];
 
@@ -50,16 +54,19 @@ int main()
 
     float value;
 
-    theta[0] = 0;
-    theta[1] = M_PI/2;
-    theta[2] = -M_PI/2;
-    theta[3] = 0;
-    theta[4] = 0;
-    theta[5] = 0;
-
     while (true) {
+        calculate_PID();
+        forward_kinematics(0,M_PI/2,-M_PI/2,0,0,0,position);
+        printf("X: %f \n", position[0]);
+        printf("Y: %f \n", position[1]);
+        printf("Z: %f \n", position[2]);
+        printf("PITCH: %f \n", position[3]);
+        printf("YAW: %f \n\n", position[4]);
 
-        position[0] = STARTING_X -3;
+        jacobian_function(0,M_PI/2,-M_PI/2,0,0,0,jacobian);
+        display(5,6,jacobian);
+        /*
+        position[0] = STARTING_X - 3;
         position[1] = STARTING_Y + 4;
         position[2] = STARTING_Z + 3;
         position[3] = 0;
@@ -95,7 +102,7 @@ int main()
         printf("Zi: %f \n", position[2]);
         printf("PITCHi: %f \n", position[3]);
         printf("YAWi: %f \n\n", position[4]);
-
+        */
         /*
         jacobian_function(0,M_PI/2,-M_PI/2,0,0,0,jacobian);
         start = time_us_64();

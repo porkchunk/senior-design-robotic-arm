@@ -41,6 +41,7 @@
         "math.h": "c",
         "gpio.h": "c",
         "main.h": "c",
-        "matrix.h": "c"
+        "matrix.h": "c",
+        "cmath": "c"
     }
 }
