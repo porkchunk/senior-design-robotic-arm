@@ -20,7 +20,7 @@
 #include "pico/multicore.h"
 
 void main_core1(){
-    while(true){
+    while(true){ //In future should only enable this when certain conditions are met
         read_encoders();
         calculate_PID();
         motor_move();
