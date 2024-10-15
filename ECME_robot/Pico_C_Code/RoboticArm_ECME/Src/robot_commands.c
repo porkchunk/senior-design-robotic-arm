@@ -2,6 +2,7 @@
 #include "motor.h"
 #include "pico/stdlib.h"
 #include "main.h"
+#include "SPI.h"
 #include "robot_modes.h"
 #include "pico/multicore.h"
 #include <stdio.h>
@@ -199,17 +200,9 @@ void set_zero_position(){
     target_position[MOTOR_4] = map_function(theta[3],0,0,0,0);
     target_position[MOTOR_5] = map_function(theta[4],0,0,0,0);
     target_position[MOTOR_6] = map_function(theta[5],0,0,0,0);
-
-    sleep_ms(2000);
 }
 
 void robot_move(int size, float position[size]){
-    //Convert current duty_cycle to angle based on model of robot
-    //float theta1 = map_function(20*duty_cycle_motors.motor1, 0.5, 2.5, -M_PI/2, M_PI/2);
-    //float theta2 = map_function(20*duty_cycle_motors.motor2, 0.5, 2.5, M_PI, 0);
-    //float theta3 = map_function(20*duty_cycle_motors.motor3, 0.56, 2.06, (-3*M_PI)/4, 0);
-   // float theta4 = map_function(20*duty_cycle_motors.motor4, 0.5, 2.5, -M_PI/2, M_PI/2);
-
     float position_final[size];
     float position_initial[size];
     float initial_angle[6];

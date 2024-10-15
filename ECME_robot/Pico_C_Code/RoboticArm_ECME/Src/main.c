@@ -27,7 +27,6 @@ void main_core1(){
     }
 }
 
-
 int main()
 {
     //Sets system clock frequency
@@ -42,11 +41,11 @@ int main()
     initialize_start_auto_mode_pin();
     SPI_initialization();
 
-    //Positions robot in initial position and lets pico know where robot is
+    //Positions robot in initial position
     set_zero_position();
-    set_initial_position();
-
     multicore_launch_core1(main_core1);
+
+    sleep_ms(10000);
 
     uint64_t start;
     uint64_t end;

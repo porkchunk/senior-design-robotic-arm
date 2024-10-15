@@ -15,5 +15,6 @@ static inline void cs_select();
 static inline void cs_deselect();
 void SPI_initialization();
 float MCP3008(int chan);
+void read_encoders();
 
 #endif
