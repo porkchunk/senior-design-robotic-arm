@@ -213,6 +213,7 @@ add_library(LibModule
             Src/quaternion.C
             Src/UART.c
             Src/SPI.c
+            Src/tests.c
             Inc/main.h)
 
 target_include_directories(LibModule PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Inc)

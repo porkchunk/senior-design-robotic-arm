@@ -53,11 +53,14 @@ void motor_move(){
     }
 
     for(int i=0; i<6; ++i){
+        //Normalizes control signal to be closer to the value of a duty cycle value from 0 to 1
+        control_signal[i] = abs(control_signal[i])/3660; //Divide here by whatever (Vmaxencoder/3.3)*4096 equals
         if(control_signal[i] > 1){
             control_signal[i] = 1;
         }
-        if(control_signal[i] < 0.275 && error_value[i] != 0){
-            control_signal[i] = 0.275;
+        //Clip duty cycle at 0.3 since this is the minimum value the motor moves at
+        if(control_signal[i] < 0.3 && error_value[i] != 0){
+            control_signal[i] = 0.3;
         }
     }
     

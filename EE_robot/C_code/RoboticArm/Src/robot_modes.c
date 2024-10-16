@@ -72,6 +72,7 @@ void manual_mode(){
     
     bool did_robot_move = xyzpitch[0] != diff_x || xyzpitch[1] != diff_y || xyzpitch[2] != diff_z;
     bool is_robot_in_boundary = ((powf(xyzpitch[0],2) + powf(xyzpitch[1],2) + powf(xyzpitch[2] - 19.9,2) - 900) < 0) && xyzpitch[2] > 7 && xyzpitch[2] < 23 && (xyzpitch[0] > 3);
+    if(xyzpitch[2] < 7 && xyzpitch[0] < 10) {is_robot_in_boundary = false;}
 
     bool x_lower = xyzpitch[0] < diff_x;
     bool y_lower = xyzpitch[1] < diff_y;
