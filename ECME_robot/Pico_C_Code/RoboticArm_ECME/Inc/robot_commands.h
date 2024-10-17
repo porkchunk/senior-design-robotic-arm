@@ -23,7 +23,6 @@ void forward_kinematics(float theta1, float theta2, float theta3, float theta4, 
 void jacobian_function(float theta1, float theta2, float theta3, float theta4, float theta5, float theta6, float jacobian[3][6]);
 float map_function(float input, float input_start, float input_end, float output_start, float output_end);
 void robot_move(int size, float position[size]);
-void set_initial_position();
 void set_zero_position();
 
 #endif

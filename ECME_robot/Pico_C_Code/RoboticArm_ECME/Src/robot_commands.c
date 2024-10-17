@@ -99,7 +99,6 @@ void forward_kinematics(float theta1, float theta2, float theta3, float theta4, 
     position[4] = atanf(-T07[2][0]/(sqrtf(powf(T07[0][0],2) + powf(T07[1][0],2)))); //Pitch
     position[5] = atanf(T07[1][0]/T07[0][0]); //Yaw
     */
-
 }
 
 void jacobian_function(float theta1, float theta2, float theta3, float theta4, float theta5, float theta6, float jacobian[3][6]){
@@ -145,8 +144,6 @@ void jacobian_function(float theta1, float theta2, float theta3, float theta4, f
     float J46 = - cos(theta5)*(cos(theta2)*sin(theta1)*(cos(theta3)*sin(theta4) + cos(theta4)*sin(theta3)) + sin(theta1)*sin(theta2)*(cos(theta3)*cos(theta4) - sin(theta3)*sin(theta4))) - sin(theta5)*(cos(theta2)*sin(theta1)*(cos(theta3)*cos(theta4) - sin(theta3)*sin(theta4)) - sin(theta1)*sin(theta2)*(cos(theta3)*sin(theta4) + cos(theta4)*sin(theta3)));
     float J56 = cos(theta5)*(cos(theta2)*(cos(theta3)*cos(theta4) - sin(theta3)*sin(theta4)) - sin(theta2)*(cos(theta3)*sin(theta4) + cos(theta4)*sin(theta3))) - sin(theta5)*(cos(theta2)*(cos(theta3)*sin(theta4) + cos(theta4)*sin(theta3)) + sin(theta2)*(cos(theta3)*cos(theta4) - sin(theta3)*sin(theta4)));
  
-
- 
     jacobian[0][0] = J11;
     jacobian[0][1] = J12;
     jacobian[0][2] = J13;
@@ -182,7 +179,6 @@ void jacobian_function(float theta1, float theta2, float theta3, float theta4, f
     jacobian[4][3] = J54;
     jacobian[4][4] = J55;
     jacobian[4][5] = J56;
-    
 }
 
 float map_function(float input, float input_start, float input_end, float output_start, float output_end){

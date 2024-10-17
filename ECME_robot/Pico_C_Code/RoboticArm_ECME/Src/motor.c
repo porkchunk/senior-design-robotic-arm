@@ -42,19 +42,16 @@ void calculate_PID(){
 }
 
 void motor_move(){
-    //Set direction of motors based on error
     for(int i=0; i<6; ++i){
+        //Set direction of motors based on error
         if(control_signal[i] < 0){
             gpio_put(PIN_DIRECTION[i], true);
         }
         else if (control_signal[i] > 0){
             gpio_put(PIN_DIRECTION[i], false);
         }
-    }
-
-    for(int i=0; i<6; ++i){
         //Normalizes control signal to be closer to the value of a duty cycle value from 0 to 1
-        control_signal[i] = abs(control_signal[i])/3660; //Divide here by whatever (Vmaxencoder/3.3)*4096 equals
+        control_signal[i] = fabs(control_signal[i])/3660; //Divide here by whatever (Vmaxencoder/3.3)*4096 equals
         if(control_signal[i] > 1){
             control_signal[i] = 1;
         }

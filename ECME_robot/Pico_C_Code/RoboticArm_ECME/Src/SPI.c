@@ -1,5 +1,6 @@
 #include "SPI.h"
 #include "motor.h"
+#include "robot_commands.h"
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
@@ -42,7 +43,7 @@ float MCP3008(int chan) {
 
     uint8_t returnData[3];
     
-    spi_write_read_blocking( SPI_PORT, buffer, returnData, sizeof(buffer));
+    spi_write_read_blocking(SPI_PORT, buffer, returnData, sizeof(buffer));
 
     int data = ((returnData[1] & 3) << 8) | returnData[2];
 
@@ -56,6 +57,7 @@ float MCP3008(int chan) {
 void read_encoders(){
     for(int i=0; i<6; ++i){
         actual_position[i] = MCP3008(i);
+        theta[i] = map_function(actual_position[i],0,0,0,0);
     }
 }
 

@@ -1,5 +1,6 @@
 #include "robot_modes.h"
 #include "main.h"
+#include "motor.h"
 #include "robot_commands.h"
 #include "hardware/adc.h"
 #include "pico/stdlib.h"
@@ -89,7 +90,7 @@ void automatic_mode()
 
         sleep_ms(500);
 
-        set_initial_position();
+        set_zero_position();
 
         claw_position = false;
         claw_move();
