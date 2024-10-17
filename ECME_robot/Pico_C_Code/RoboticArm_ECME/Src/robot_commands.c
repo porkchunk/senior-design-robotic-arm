@@ -189,12 +189,21 @@ float map_function(float input, float input_start, float input_end, float output
 }
 
 void set_zero_position(){
+    position[0] = 0;
+    position[1] = 0;
+    position[2] = 0;
+    position[3] = 0;
+    position[4] = 0;
+
+    robot_move(5, position);
+   /*
     target_position[MOTOR_1] = map_function(theta[0],0,0,0,0);
     target_position[MOTOR_2] = map_function(theta[1],0,0,0,0);
     target_position[MOTOR_3] = map_function(theta[2],0,0,0,0);
     target_position[MOTOR_4] = map_function(theta[3],0,0,0,0);
     target_position[MOTOR_5] = map_function(theta[4],0,0,0,0);
     target_position[MOTOR_6] = map_function(theta[5],0,0,0,0);
+    */
 }
 
 void robot_move(int size, float position[size]){
@@ -257,13 +266,6 @@ void robot_move(int size, float position[size]){
         initial_angle[3] = delta_angle[3][0]*time_step + initial_angle[3];
         initial_angle[4] = delta_angle[4][0]*time_step + initial_angle[4];
         initial_angle[5] = delta_angle[5][0]*time_step + initial_angle[5];
-
-        theta[0] = initial_angle[0];
-        theta[1] = initial_angle[1];
-        theta[2] = initial_angle[2];
-        theta[3] = initial_angle[3];
-        theta[4] = initial_angle[4];
-        theta[5] = initial_angle[5];
 
         //Calculate new position and jacobian
         forward_kinematics(initial_angle[0], initial_angle[1], initial_angle[2], initial_angle[3], initial_angle[4], initial_angle[5], position_initial);

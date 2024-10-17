@@ -43,6 +43,7 @@ int main()
 
     //Positions robot in initial position
     set_zero_position();
+
     multicore_launch_core1(main_core1);
 
     sleep_ms(10000);
