@@ -43,5 +43,6 @@
         "main.h": "c",
         "matrix.h": "c",
         "cmath": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

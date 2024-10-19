@@ -32,6 +32,11 @@ int inverse(int matrix_size, float mat[matrix_size][matrix_size], float inverse[
                 }
             }
             if (!swapped) {
+                for (int i = 0; i < matrix_size; i++) {
+                    for (int j = 0; j < matrix_size; j++) {
+                          inverse[i][j] = 0;
+                      }
+                 }
                 printf("Matrix is singular, cannot find its inverse.\n");
                 return 0;
             }
@@ -90,15 +95,32 @@ void multiply_matrices(int m, int n, int p, float first[][n], float second[][p],
    }
 }
 
-void add_subtract_matrix(int size, float matrix1[size],float matrix2[size],float result_matrix[size], bool add){
+void add_subtract(int m, float matrix1[m],float matrix2[m],float result_matrix[m], bool add){
     if(add == true){
-        for(int i=0; i<size; ++i){
-            result_matrix[i] = matrix1[i] + matrix2[i];
+        for(int i=0; i<m; ++i){
+                result_matrix[i] = matrix1[i] + matrix2[i];
+            }
+        }
+    else{
+        for(int i=0; i<m; ++i){
+                result_matrix[i] = matrix1[i] - matrix2[i];
+        }
+    }
+}
+
+void add_subtract_matrix(int m, int n, float matrix1[m][n],float matrix2[m][n],float result_matrix[m][n], bool add){
+    if(add == true){
+        for(int i=0; i<m; ++i){
+            for(int j=0; j<n; ++j){
+                result_matrix[i][j] = matrix1[i][j] + matrix2[i][j];
+            }
         }
     }
     else{
-        for(int i=0; i<size; ++i){
-            result_matrix[i] = matrix1[i] - matrix2[i];
+        for(int i=0; i<m; ++i){
+            for(int j=0; j<n; ++j){
+                result_matrix[i][j] = matrix1[i][j] - matrix2[i][j];
+            }
         }
     }
 }
@@ -142,13 +164,23 @@ void display(int m, int n, float result[m][n]) {
 }
 
 void pseudo_inverse(int m, int n, float matrix[m][n], float pseudo_inverse[n][m]){
-    uint64_t start;
-    uint64_t end;
     float first_term_linearly_surjective[m][m];
     float first_term_linearly_injective[n][n];
     float first_term_linearly_surjective_inverse[m][m];
     float first_term_linearly_injective_inverse[n][n];
+    float intermediate_term[m][m];
     float matrix_transpose[n][m];
+    
+    float lambda = 1e-2;
+    float identity[6][6] = {{lambda*1,0,0,0,0,0},{0,lambda*1,0,0,0,0},{0,0,lambda*1,0,0,0},{0,0,0,lambda*1,0,0},{0,0,0,0,lambda*1,0},{0,0,0,0,0,lambda*1}};
+
+    transpose(m, n, matrix, matrix_transpose);
+    multiply_matrices(m, m, n, matrix, matrix_transpose, intermediate_term);
+    add_subtract_matrix(m, m, intermediate_term, identity, first_term_linearly_surjective, true);
+    inverse(m, first_term_linearly_surjective, first_term_linearly_surjective_inverse);
+    multiply_matrices(n, n, m, matrix_transpose, first_term_linearly_surjective_inverse, pseudo_inverse);
+
+    /*
     transpose(m, n, matrix, matrix_transpose);
     multiply_matrices(m, n, m, matrix, matrix_transpose, first_term_linearly_surjective);
 
@@ -156,8 +188,29 @@ void pseudo_inverse(int m, int n, float matrix[m][n], float pseudo_inverse[n][m]
         multiply_matrices(n, m, m, matrix_transpose, first_term_linearly_surjective_inverse, pseudo_inverse);
     }
     else{
+        printf("injective \n");
         multiply_matrices(n, m, n, matrix_transpose, matrix, first_term_linearly_injective);
         inverse(n, first_term_linearly_injective, first_term_linearly_injective_inverse);
         multiply_matrices(n, n, m, first_term_linearly_injective_inverse, matrix_transpose, pseudo_inverse);
     }
+   */
+}
+
+void euler_to_rotation_matrix(float pitch, float yaw, float rotation_matrix[3][3]){    
+    float cp = cos(pitch);
+    float sp = sin(pitch);
+    float cy = cos(yaw);
+    float sy = sin(yaw);
+
+    rotation_matrix[0][0] = cp*cy;
+    rotation_matrix[1][0] = cp*sy;
+    rotation_matrix[2][0] = -sp;
+
+    rotation_matrix[0][1] = -sy;
+    rotation_matrix[1][1] = cy;
+    rotation_matrix[2][1] = 0;
+
+    rotation_matrix[0][2] = cy*sp;
+    rotation_matrix[1][2] = sp*sy;
+    rotation_matrix[2][2] = cp;
 }

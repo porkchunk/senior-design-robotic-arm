@@ -20,7 +20,7 @@
 #include "pico/multicore.h"
 
 void main_core1(){
-    while(true){ //In future should only enable this when certain conditions are met
+    while(false){ //In future should only enable this when certain conditions are met
         read_encoders();
         calculate_PID();
         motor_move();
@@ -46,7 +46,7 @@ int main()
 
     multicore_launch_core1(main_core1);
 
-    sleep_ms(10000);
+    //sleep_ms(10000);
 
     uint64_t start;
     uint64_t end;
@@ -60,16 +60,61 @@ int main()
 
     float value;
 
+    float rotation_matrix[3][3] = {0};
+
+    float norm1 = 0;
+    float norm2 = 0;
+    float speed;
+
     while (true){
-        forward_kinematics(0,M_PI/2,-M_PI/2,0,0,0,position);
+        position[0] = 9.8;
+        position[1] = 6.1;
+        position[2] = 9;
+        position[3] = 0;
+        position[4] = 0;
+        start = time_us_64();
+        robot_move(5,false,position);
+        end = time_us_64();
+        printf("time: %llu \n\n", end -start);
+
+        forward_kinematics(theta[0],theta[1],theta[2],theta[3],theta[4],theta[5],position,rotation_matrix);
+
         printf("X: %f \n", position[0]);
         printf("Y: %f \n", position[1]);
         printf("Z: %f \n", position[2]);
         printf("PITCH: %f \n", position[3]);
         printf("YAW: %f \n\n", position[4]);
 
-        jacobian_function(0,M_PI/2,-M_PI/2,0,0,0,jacobian);
-        display(5,6,jacobian);
+        norm1 = norm(5,position);
+        position[0] = 0;
+        position[1] = -10;
+        position[2] = (float)49/20;
+        position[3] = M_PI/4;
+        position[4] = -M_PI/2;
+        
+        robot_move(5,false,position);
+
+        forward_kinematics(theta[0],theta[1],theta[2],theta[3],theta[4],theta[5],position,rotation_matrix);
+
+        printf("X: %f \n", position[0]);
+        printf("Y: %f \n", position[1]);
+        printf("Z: %f \n", position[2]);
+        printf("PITCH: %f \n", position[3]);
+        printf("YAW: %f \n\n", position[4]);
+        printf("THETA1: %f \n", theta[0]);
+        printf("THETA2: %f \n", theta[1]);
+        printf("THETA3: %f \n", theta[2]);
+        printf("THETA4: %f \n", theta[3]);
+        printf("THETA5: %f \n", theta[4]);
+        printf("THETA6: %f \n", theta[5]);
+
+        norm2 = norm(5,position);
+        speed = fabs(norm1-norm2)/((end-start)/1e6);
+
+        printf("Speed: %0.2f\n", speed);
+
+        //jacobian_function(0,M_PI/2,-M_PI/2,0,0,0,jacobian);
+       // display(5,6,jacobian);
         /*
         position[0] = STARTING_X - 3;
         position[1] = STARTING_Y + 4;

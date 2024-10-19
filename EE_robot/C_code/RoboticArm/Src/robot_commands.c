@@ -81,8 +81,7 @@ void forward_kinematics(float theta1, float theta2, float theta3, float theta4, 
     */
 }
 
-void jacobian_function(float theta1, float theta2, float theta3, float theta4, float jacobian[MATRIX_ROW_SIZE][MATRIX_COL_SIZE]){
-    
+void jacobian_function(float theta1, float theta2, float theta3, float theta4, float jacobian[MATRIX_ROW_SIZE][MATRIX_COL_SIZE])
     float s1 = sin(theta1);
     float s2 = sin(theta2);
     float s3 = sin(theta3);
