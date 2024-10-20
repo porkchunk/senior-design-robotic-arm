@@ -69,11 +69,39 @@ void forward_kinematics(float theta1, float theta2, float theta3, float theta4, 
     float R13 = - c5*(c1*c2*(c3*s4 + c4*s3) + c1*s2*(c3*c4 - s3*s4)) - s5*(c1*c2*(c3*c4 - s3*s4) - c1*s2*(c3*s4 + c4*s3));
     float R23 = - c5*(c2*s1*(c3*s4 + c4*s3) + s1*s2*(c3*c4 - s3*s4)) - s5*(c2*s1*(c3*c4 - s3*s4) - s1*s2*(c3*s4 + c4*s3));
     float R33 = c5*(c2*(c3*c4 - s3*s4) - s2*(c3*s4 + c4*s3)) - s5*(c2*(c3*s4 + c4*s3) + s2*(c3*c4 - s3*s4));
- 
+    
+    if(fabs(R11) < 0.000001){
+        R11 = 0;
+    }
+    if(fabs(R21) < 0.000001){
+        R21 = 0;
+    }
+    if(fabs(R31) < 0.000001){
+        R31 = 0;
+    }
+    
+    if(fabs(R12) < 0.000001){
+        R12 = 0;
+    }
+    if(fabs(R22) < 0.000001){
+        R22 = 0;
+    }
+    if(fabs(R32) < 0.000001){
+        R32 = 0;
+    }
+    if(fabs(R13) < 0.000001){
+        R13 = 0;
+    }
+    if(fabs(R23) < 0.000001){
+        R23 = 0;
+    }
+    if(fabs(R33) < 0.000001){
+        R33 = 0;
+    }
     //position[3] = atanf(R32/R33); ROLL (NEED TO GET RID OF WE CANT ROLL OUR ROBOT)
   
     position[3] = -asinf(R31); //atanf(-R31/(sqrtf(powf(R11,2) + powf(R21,2)))); //PITCH
-    position[4] = atanf((R21/position[3])/(R11/position[3])); //YAW
+    position[4] = atanf(R21/cos(position[3])/R11/cos(position[3])); //YAW
     
     rotation_matrix[0][0] = R11;
     rotation_matrix[1][0] = R21;
@@ -305,7 +333,13 @@ void set_zero_position(){
     */
 }
 
-void robot_move(int size, bool debug, float position[size]){
+void robot_move(uint size, bool debug, float lambda, float position[size]){
+    theta[0] = 0;
+    theta[1] = M_PI/2;
+    theta[2] = -M_PI/2;
+    theta[3] = -M_PI/2;
+    theta[4] = M_PI/2;
+    theta[5] = 0;
     float position_final[5];
     float position_initial[5];
     float x_final[3];
@@ -322,13 +356,16 @@ void robot_move(int size, bool debug, float position[size]){
 
     float initial_rotation_matrix[3][3] = {0};
     float final_rotation_matrix[3][3] = {0};
-    float rotation_transpose[3][3]= {0};
+    float rotation_transpose1[3][3]= {0};
+    float rotation_transpose2[3][3]= {0};
+    float r_error1[3][3] = {0};
+    float r_error2[3][3] = {0};
     float r_error[3][3] = {0};
     float angular_difference[3] = {0};
 
-    float time_step = 0.001;
+    float time_step = 0.005;
     float error = 0.05;
-    float speed = 2;
+    float speed = 1;
 
     int32_t count = 0;
     uint64_t start;
@@ -342,9 +379,7 @@ void robot_move(int size, bool debug, float position[size]){
 
     jacobian_function(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], jacobian_matrix);
     forward_kinematics(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], position_initial, initial_rotation_matrix);
-
     euler_to_rotation_matrix(position[3],position[4],final_rotation_matrix);
-
     for(int i=0; i<3; ++i){
         x_final[i] = position[i];
         x_initial[i] = position_initial[i];
@@ -352,17 +387,26 @@ void robot_move(int size, bool debug, float position[size]){
         position_difference[i] = 1;
     }
 
+    transpose(3,3,final_rotation_matrix,rotation_transpose2);
+
     while(norm(3, position_difference) >= error){
         start = time_us_64();
         //position_final = position_initial - position_difference
         add_subtract(3,x_final, x_initial, position_difference, false);
 
-        transpose(3,3,initial_rotation_matrix,rotation_transpose);
-        multiply_matrices(3,3,3,rotation_transpose,final_rotation_matrix,r_error);
+        transpose(3,3,initial_rotation_matrix,rotation_transpose1);
+        multiply_matrices(3,3,3,final_rotation_matrix,rotation_transpose1,r_error1);
+        multiply_matrices(3,3,3,rotation_transpose2,initial_rotation_matrix,r_error2);
 
-        angular_difference[0] = (0.5)*(r_error[2][1] - r_error[1][2]);
-        angular_difference[1] = (0.5)*(r_error[0][2] - r_error[2][0]);
-        angular_difference[2] = (0.5)*(r_error[1][0] - r_error[0][1]);
+        add_subtract_matrix(3, 3,r_error1,r_error2,r_error,false);
+
+       // angular_difference[0] = (0.5)*(r_error[2][1] - r_error[1][2]);
+       // angular_difference[1] = (0.5)*(r_error[0][2] - r_error[2][0]);
+       // angular_difference[2] = (0.5)*(r_error[1][0] - r_error[0][1]);
+
+        angular_difference[0] = 2*r_error[2][1];
+        angular_difference[1] = 2*r_error[0][2];
+        angular_difference[2] = 2*r_error[1][0];
 
         total_difference[0] = position_difference[0];
         total_difference[1] = position_difference[1];
@@ -374,7 +418,7 @@ void robot_move(int size, bool debug, float position[size]){
         //velocity = speed*(position_difference/norm(position_difference))
         calculate_velocity(6, total_difference, velocity, speed);
 
-        pseudo_inverse(6,6, jacobian_matrix, jacobian_inverse);
+        pseudo_inverse(6,6,lambda,jacobian_matrix, jacobian_inverse);
 
         //Calculate delta_angle from delta_angle = J^{-1} * Velocity
         multiply_matrices(6,6,1,jacobian_inverse, velocity, delta_angle);
@@ -414,7 +458,8 @@ void robot_move(int size, bool debug, float position[size]){
         //printf("%llu \n",end-start);
 
         ++count;
-        if(count - 10000>= norm(size, total_distance)/(speed*time_step)){error = 4000;}
+        if(count > 11000){error=4000;}
+       // if(count - 10000>= norm(3, total_distance)/(speed*time_step)){error = 4000;}
     } 
     //printf("X: %0.3f \n", position_initial[0]);
     //printf("Y: %0.3f \n", position_initial[1]);

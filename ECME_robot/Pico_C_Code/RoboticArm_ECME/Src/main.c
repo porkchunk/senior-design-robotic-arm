@@ -67,9 +67,10 @@ int main()
     float speed;
 
     while (true){
-        position[0] = 9.8;
-        position[1] = 6.1;
-        position[2] = 9;
+        /*
+        position[0] = 9.1;
+        position[1] = 0;
+        position[2] = 2.65;
         position[3] = 0;
         position[4] = 0;
         start = time_us_64();
@@ -84,15 +85,21 @@ int main()
         printf("Z: %f \n", position[2]);
         printf("PITCH: %f \n", position[3]);
         printf("YAW: %f \n\n", position[4]);
-
+        printf("THETA1: %f \n", theta[0]);
+        printf("THETA2: %f \n", theta[1]);
+        printf("THETA3: %f \n", theta[2]);
+        printf("THETA4: %f \n", theta[3]);
+        printf("THETA5: %f \n", theta[4]);
+        printf("THETA6: %f \n", theta[5]);
+        */
         norm1 = norm(5,position);
-        position[0] = 0;
-        position[1] = -10;
-        position[2] = (float)49/20;
-        position[3] = M_PI/4;
+        position[0] = -0.5;
+        position[1] = -7;
+        position[2] = (float)3;
+        position[3] = M_PI/2 - 0.1;
         position[4] = -M_PI/2;
         
-        robot_move(5,false,position);
+        robot_move(5,false,2.5,position);
 
         forward_kinematics(theta[0],theta[1],theta[2],theta[3],theta[4],theta[5],position,rotation_matrix);
 
@@ -106,12 +113,7 @@ int main()
         printf("THETA3: %f \n", theta[2]);
         printf("THETA4: %f \n", theta[3]);
         printf("THETA5: %f \n", theta[4]);
-        printf("THETA6: %f \n", theta[5]);
-
-        norm2 = norm(5,position);
-        speed = fabs(norm1-norm2)/((end-start)/1e6);
-
-        printf("Speed: %0.2f\n", speed);
+        printf("THETA6: %f \n\n", theta[5]);
 
         //jacobian_function(0,M_PI/2,-M_PI/2,0,0,0,jacobian);
        // display(5,6,jacobian);

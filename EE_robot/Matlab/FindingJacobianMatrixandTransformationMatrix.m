@@ -37,11 +37,11 @@ T03 = double(T01*T12*T23);
 T05 = double(T04*T45);
 
 t1 = -pi/2;
-t2 = pi/2;
+t2 =  pi/2;
 t3 = -pi/2;
 t4 = -pi/2;
-t5 = pi/2;
-t6 = 0;    
+t5 =  pi/2;
+t6 =     0;    
 
 
     c1 = cos(theta1);

@@ -163,7 +163,7 @@ void display(int m, int n, float result[m][n]) {
    }
 }
 
-void pseudo_inverse(int m, int n, float matrix[m][n], float pseudo_inverse[n][m]){
+void pseudo_inverse(int m, int n, float lambda, float matrix[m][n], float pseudo_inverse[n][m]){
     float first_term_linearly_surjective[m][m];
     float first_term_linearly_injective[n][n];
     float first_term_linearly_surjective_inverse[m][m];
@@ -171,7 +171,6 @@ void pseudo_inverse(int m, int n, float matrix[m][n], float pseudo_inverse[n][m]
     float intermediate_term[m][m];
     float matrix_transpose[n][m];
     
-    float lambda = 1e-2;
     float identity[6][6] = {{lambda*1,0,0,0,0,0},{0,lambda*1,0,0,0,0},{0,0,lambda*1,0,0,0},{0,0,0,lambda*1,0,0},{0,0,0,0,lambda*1,0},{0,0,0,0,0,lambda*1}};
 
     transpose(m, n, matrix, matrix_transpose);
