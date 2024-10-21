@@ -334,12 +334,7 @@ void set_zero_position(){
 }
 
 void robot_move(uint size, bool debug, float lambda, float position[size]){
-    theta[0] = 0;
-    theta[1] = M_PI/2;
-    theta[2] = -M_PI/2;
-    theta[3] = -M_PI/2;
-    theta[4] = M_PI/2;
-    theta[5] = 0;
+
     float position_final[5];
     float position_initial[5];
     float x_final[3];
@@ -363,9 +358,9 @@ void robot_move(uint size, bool debug, float lambda, float position[size]){
     float r_error[3][3] = {0};
     float angular_difference[3] = {0};
 
-    float time_step = 0.005;
+    float time_step = 0.001;
     float error = 0.05;
-    float speed = 1;
+    float speed = 2;
 
     int32_t count = 0;
     uint64_t start;
@@ -458,8 +453,8 @@ void robot_move(uint size, bool debug, float lambda, float position[size]){
         //printf("%llu \n",end-start);
 
         ++count;
-        if(count > 11000){error=4000;}
-       // if(count - 10000>= norm(3, total_distance)/(speed*time_step)){error = 4000;}
+       // if(count > 11000){error=4000;}
+        if(count - 5000>= norm(3, total_distance)/(speed*time_step)){error = 4000;}
     } 
     //printf("X: %0.3f \n", position_initial[0]);
     //printf("Y: %0.3f \n", position_initial[1]);

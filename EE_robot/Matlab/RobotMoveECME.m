@@ -1,7 +1,7 @@
 function [x_initial] = RobotMoveECME(x,y,z,pitch,yaw) 
 
 distances = [1.5,7.2,3,7,0.95,2.5,3.6,0];
-initial_angles = [-pi/4,pi/2,-pi/2,-pi/2,pi/2,0]';
+initial_angles = [-1.56,2.105,-1.3,-0.94,-1.305,-0.075]';
 roll=0;
 
 T1 = [cos(yaw), -sin(yaw), 0;
@@ -20,20 +20,17 @@ T3 = [1,0,0;
 
 final_rotation_matrix = T1*T2*T3;
 initial_rotation_matrix = transform_matrix(1:3,1:3);
-%disp(final_rotation_matrix);
-
-q_initial = rotm2quat(initial_rotation_matrix);
-q_final = rotm2quat(final_rotation_matrix);
 
 x_final = [x,y,z]';
 x_initial = [transform_matrix(1,4),transform_matrix(2,4),transform_matrix(3,4)]';
 
 [jacobian,~] = FindingJacobianMatrixandTransformationMatrix(initial_angles, distances);
-%disp(jacobian);
-time_step = 0.005;
+
+time_step = 0.001;
 counter = 0;
-lambda = 2.8;
+lambda = 8e-2;
 x_difference = 1;
+speed = 2;
 
 while(norm(x_difference) >= 0.05)
     x_difference = x_final - x_initial;
@@ -46,7 +43,7 @@ while(norm(x_difference) >= 0.05)
 
     total_difference = [x_difference; w_difference];
 
-    velocity = (total_difference/norm(total_difference));
+    velocity = speed*(total_difference/norm(total_difference));
     
     jacobian_inverse =  jacobian' * inv((jacobian*jacobian' + lambda*eye(6)));
 
@@ -64,14 +61,9 @@ while(norm(x_difference) >= 0.05)
     x_initial = [transform_matrix(1,4),transform_matrix(2,4),transform_matrix(3,4)]';
     position = [x_initial;pitch;yaw];
 
-    if counter < 3000
-        %disp(position)
-
-    end
-
     [jacobian,~] = FindingJacobianMatrixandTransformationMatrix(new_angle, distances);
     counter = counter + 1;
-    if counter>11000
+    if counter>7000
         break;
     end
 end
