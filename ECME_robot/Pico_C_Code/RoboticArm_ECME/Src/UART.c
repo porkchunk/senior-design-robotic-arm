@@ -7,6 +7,4 @@ void UART_initialization(){
     gpio_set_function(1, UART_FUNCSEL_NUM(uart0, 1));
 
     uart_init(uart0, 115200);
-
-    
 }

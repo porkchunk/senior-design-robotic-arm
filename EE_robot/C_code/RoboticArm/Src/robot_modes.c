@@ -71,7 +71,7 @@ void manual_mode(){
     float theta4 = map_function(20*duty_cycle_motors.motor4, 0.5, 2.5, -M_PI/2, M_PI/2);
     
     bool did_robot_move = xyzpitch[0] != diff_x || xyzpitch[1] != diff_y || xyzpitch[2] != diff_z;
-    bool is_robot_in_boundary = ((powf(xyzpitch[0],2) + powf(xyzpitch[1],2) + powf(xyzpitch[2] - 19.9,2) - 900) < 0) && xyzpitch[2] > 7 && xyzpitch[2] < 23 && (xyzpitch[0] > 3);
+    bool is_robot_in_boundary = ((powf(xyzpitch[0],2) + powf(xyzpitch[1],2) + powf(xyzpitch[2] - 19.9,2) - 936) < 0) && xyzpitch[2] > 7 && xyzpitch[2] < 23 && (xyzpitch[0] > 3);
     if(xyzpitch[2] < 7 && xyzpitch[0] < 10) {is_robot_in_boundary = false;}
 
     bool x_lower = xyzpitch[0] < diff_x;
@@ -109,7 +109,6 @@ void manual_mode(){
         if(z_higher){
             xyzpitch[2] = xyzpitch[2]/1.1;
         }
-        
         robot_move(xyzpitch);
 
         forward_kinematics(theta1, theta2, theta3, theta4, current_position);
@@ -118,8 +117,6 @@ void manual_mode(){
         printf("Z: %0.3f\n", current_position[2]);
         printf("PITCH: %0.3f\n", current_position[3]);
     }
-
-
 
     claw_move();
 }

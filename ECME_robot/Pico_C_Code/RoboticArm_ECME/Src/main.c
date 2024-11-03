@@ -68,6 +68,7 @@ int main()
 
     while (true){
         
+        /*
         position[0] = 9.8;
         position[1] = 2;
         position[2] = 12.5;
@@ -163,7 +164,7 @@ int main()
 
         //jacobian_function(0,M_PI/2,-M_PI/2,0,0,0,jacobian);
        // display(5,6,jacobian);
-        /*
+     
         position[0] = STARTING_X - 3;
         position[1] = STARTING_Y + 4;
         position[2] = STARTING_Z + 3;
@@ -200,8 +201,7 @@ int main()
         printf("Zi: %f \n", position[2]);
         printf("PITCHi: %f \n", position[3]);
         printf("YAWi: %f \n\n", position[4]);
-        */
-        /*
+       
         jacobian_function(0,M_PI/2,-M_PI/2,0,0,0,jacobian);
         start = time_us_64();
         inverse(jacobian, jacobian_inverse);

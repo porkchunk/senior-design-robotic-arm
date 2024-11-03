@@ -4,8 +4,6 @@
 #include "matrix.h"
 #include "pico/stdlib.h"
 
-#define TRANSFORM_ROW_SIZE 1
-#define TRANSFORM_COLUMN_SIZE 4
 #define DISTANCE_LINK_1 9.5
 #define DISTANCE_LINK_2 10.4 
 #define DISTANCE_LINK_3 8.75
