@@ -1,17 +1,3 @@
-# == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
-if(WIN32)
-    set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(sdkVersion 2.0.0)
-set(toolchainVersion 13_2_Rel1)
-set(picotoolVersion 2.0.0)
-set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-if (EXISTS ${picoVscode})
-    include(${picoVscode})
-endif()
-# ====================================================================================
 # == DO NEVER EDIT THE NEXT LINES for Raspberry Pi Pico VS Code Extension to work ==
 if(WIN32)
     set(USERHOME $ENV{USERPROFILE})
@@ -220,7 +206,6 @@ add_library(LibModule
             Src/matrix.c
             Src/robot_commands.c
             Src/motor.c
-            Src/timer.c
             Src/interrupts.c
             Src/adc.c
             Src/robot_modes.c
@@ -257,6 +242,7 @@ target_link_libraries(LibModule
                 hardware_pwm    
                 hardware_adc
                 hardware_spi
+                hardware_uart
                 pico_multicore
                 )
 
@@ -272,6 +258,7 @@ target_link_libraries(RoboticArm_ECME
         hardware_gpio hardware_pwm
         hardware_adc
         hardware_spi
+        hardware_uart
         LibModule
         pico_multicore
         )

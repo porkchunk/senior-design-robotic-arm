@@ -7,7 +7,6 @@
 #include "interrupts.h"
 #include "adc.h"
 #include "robot_modes.h"
-#include "timer.h"
 #include "main.h"
 #include "SPI.h"
 
@@ -67,7 +66,7 @@ int main()
     float speed;
 
     while (true){
-        
+
         /*
         position[0] = 9.8;
         position[1] = 2;
