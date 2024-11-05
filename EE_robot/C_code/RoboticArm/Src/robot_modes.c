@@ -92,22 +92,22 @@ void manual_mode(){
     }
     if(!is_robot_in_boundary){
         if(x_lower){
-            xyzpitch[0] = xyzpitch[0]/0.9;
+            xyzpitch[0] = xyzpitch[0]/0.99;
         }
         if(x_higher){
-            xyzpitch[0] = xyzpitch[0]/1.1;
+            xyzpitch[0] = xyzpitch[0]/1.01;
         }
         if(y_lower){
-            xyzpitch[1] = xyzpitch[1]/0.9;
+            xyzpitch[1] = xyzpitch[1]/0.99;
         }
         if(y_higher){
-            xyzpitch[1] = xyzpitch[1]/1.1;
+            xyzpitch[1] = xyzpitch[1]/1.01;
         }
         if(z_lower){
-            xyzpitch[2] = xyzpitch[2]/0.9;
+            xyzpitch[2] = xyzpitch[2]/0.99;
         }
         if(z_higher){
-            xyzpitch[2] = xyzpitch[2]/1.1;
+            xyzpitch[2] = xyzpitch[2]/1.01;
         }
         robot_move(xyzpitch);
 
