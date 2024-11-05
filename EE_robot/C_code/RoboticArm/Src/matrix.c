@@ -62,6 +62,26 @@ int inverse(int matrix_size, float mat[matrix_size][matrix_size], float inverse[
 
     return 1;
 }
+/*
+void pseudo_inverse(float lambda, float matrix[4][4], float pseudo_inverse[4][4]){
+    int m = 4;
+    int n = 4;
+    float first_term_linearly_surjective[m][m];
+    float first_term_linearly_injective[n][n];
+    float first_term_linearly_surjective_inverse[m][m];
+    float first_term_linearly_injective_inverse[n][n];
+    float intermediate_term[m][m];
+    float matrix_transpose[n][m];
+    
+    float identity[4][4] = {{lambda*1,0,0,0},{0,lambda*1,0,0},{0,0,lambda*1,0},{0,0,0,lambda*1}};
+
+    transpose(4,4,matrix, matrix_transpose);
+    multiply_matrices(matrix, matrix_transpose, intermediate_term);
+    add_subtract_matrix(intermediate_term, identity, first_term_linearly_surjective, true);
+    inverse(4, first_term_linearly_surjective, first_term_linearly_surjective_inverse);
+    multiply_matrices(matrix_transpose, first_term_linearly_surjective_inverse, pseudo_inverse);
+}
+*/
 
 void pseudo_inverse(float matrix[4][4], float pseudo_inverse[4][4]){
     uint64_t start;

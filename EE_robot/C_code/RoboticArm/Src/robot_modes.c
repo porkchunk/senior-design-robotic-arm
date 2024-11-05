@@ -71,26 +71,28 @@ void manual_mode(){
     float theta4 = map_function(20*duty_cycle_motors.motor4, 0.5, 2.5, -M_PI/2, M_PI/2);
     
     bool did_robot_move = xyzpitch[0] != diff_x || xyzpitch[1] != diff_y || xyzpitch[2] != diff_z;
-    bool is_robot_in_boundary = ((powf(xyzpitch[0],2) + powf(xyzpitch[1],2) + powf(xyzpitch[2] - 19.9,2) - 936) < 0) && xyzpitch[2] > 7 && xyzpitch[2] < 23 && (xyzpitch[0] > 3);
-    if(xyzpitch[2] < 7 && xyzpitch[0] < 10) {is_robot_in_boundary = false;}
+    bool is_robot_in_boundary = ((powf(xyzpitch[0],2) + powf(xyzpitch[1],2) + powf(xyzpitch[2] - 9.5,2) - 1000) < 0) && xyzpitch[2] > 7 && xyzpitch[2] < 23.5 && (xyzpitch[0] > 1);
+    if(xyzpitch[2] < 13 && ((powf(xyzpitch[0],2) + powf(xyzpitch[1],2) - 560) < 0)) {is_robot_in_boundary = false;}
 
-    bool x_lower = xyzpitch[0] < diff_x;
-    bool y_lower = xyzpitch[1] < diff_y;
-    bool z_lower = xyzpitch[2] < diff_z;
-    bool x_higher = xyzpitch[0] > diff_x;
-    bool y_higher = xyzpitch[1] > diff_y;
-    bool z_higher = xyzpitch[2] > diff_z;
+    bool x_lower = fabs(xyzpitch[0]) < fabs(diff_x); 
+    bool y_lower = fabs(xyzpitch[1]) < fabs(diff_y);
+    bool z_lower = fabs(xyzpitch[2]) < fabs(diff_z);
+    bool x_higher = fabs(xyzpitch[0]) > fabs(diff_x);
+    bool y_higher = fabs(xyzpitch[1]) > fabs(diff_y);
+    bool z_higher = fabs(xyzpitch[2]) > fabs(diff_z);
+
 
     if(did_robot_move && is_robot_in_boundary){
         robot_move(xyzpitch); 
 
         forward_kinematics(theta1, theta2, theta3, theta4, current_position);
-        printf("X: %0.3f\n", current_position[0]);
-        printf("Y: %0.3f\n", current_position[1]);
-        printf("Z: %0.3f\n", current_position[2]);
-        printf("PITCH: %0.3f\n", current_position[3]);
+        printf("X: %0.3f\n", xyzpitch[0]);
+        printf("Y: %0.3f\n", xyzpitch[1]);
+        printf("Z: %0.3f\n", xyzpitch[2]);
+        printf("PITCH: %0.3f\n", xyzpitch[3]);
+        printf("boundary number: %d\n", ((powf(xyzpitch[0],2) + powf(xyzpitch[1],2) + powf(xyzpitch[2] - 9.5,2) - 600) < 0) && xyzpitch[2] > 7 && xyzpitch[2] < 23 && (xyzpitch[0] > 3));
     }
-    if(!is_robot_in_boundary){
+    if(did_robot_move && !is_robot_in_boundary){
         if(x_lower){
             xyzpitch[0] = xyzpitch[0]/0.99;
         }
@@ -110,12 +112,14 @@ void manual_mode(){
             xyzpitch[2] = xyzpitch[2]/1.01;
         }
         robot_move(xyzpitch);
-
+        printf("boundary number: %d\n", ((powf(xyzpitch[0],2) + powf(xyzpitch[1],2) + powf(xyzpitch[2] - 9.5,2) - 600) < 0) && xyzpitch[2] > 7 && xyzpitch[2] < 23 && (xyzpitch[0] > 3));
+        /*
         forward_kinematics(theta1, theta2, theta3, theta4, current_position);
         printf("X: %0.3f\n", current_position[0]);
         printf("Y: %0.3f\n", current_position[1]);
         printf("Z: %0.3f\n", current_position[2]);
         printf("PITCH: %0.3f\n", current_position[3]);
+        */
     }
 
     claw_move();

@@ -45,7 +45,7 @@ int main()
     float jacobian_inverse[4][4];
     
     while (true) {
-        
+        /*
         xyzpitch[0] = 30;
         xyzpitch[1] = STARTING_Y;
         xyzpitch[2] = 9;
@@ -84,14 +84,14 @@ int main()
         robot_move(xyzpitch);
 
         sleep_ms(500);
+        */
         
-        /*
         if(gpio_get(AUTO_MANUAL_SWITCH_PIN) == true){
             manual_mode();
         }
         else{
             automatic_mode();
         }
-        */
+    
     }
 }
