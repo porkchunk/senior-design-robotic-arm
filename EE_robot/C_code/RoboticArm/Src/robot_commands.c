@@ -152,7 +152,7 @@ void claw_move(){
 }
 
 void set_zero_position(){
-    duty_cycle_set(0, M_PI/2, -M_PI/2, 0, 1);
+    duty_cycle_set(0, 2*M_PI/3, -2*M_PI/3, 0, 1);
     motor_move(slice_motors, chan_motors);
     claw_move(slice_motors, chan_motors);
 
@@ -160,12 +160,7 @@ void set_zero_position(){
 }
 
 void set_initial_position(){
-    xyzpitch[0] = STARTING_X;
-    xyzpitch[1] = STARTING_Y;
-    xyzpitch[2] = STARTING_Z;
-    xyzpitch[3] = STARTING_PITCH;
-
-    robot_move(xyzpitch);
+    forward_kinematics(0, 2*M_PI/3, -2*M_PI/3, 0 , xyzpitch);
 }
 
 void robot_move(float xyzpitch[4]){
