@@ -26,6 +26,20 @@ if (EXISTS ${picoVscode})
     include(${picoVscode})
 endif()
 # ====================================================================================
+# == DO NOT EDIT THE FOLLOWING LINES for the Raspberry Pi Pico VS Code Extension to work ==
+if(WIN32)
+    set(USERHOME $ENV{USERPROFILE})
+else()
+    set(USERHOME $ENV{HOME})
+endif()
+set(sdkVersion 2.0.0)
+set(toolchainVersion 13_2_Rel1)
+set(picotoolVersion 2.0.0)
+set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
+if (EXISTS ${picoVscode})
+    include(${picoVscode})
+endif()
+# ====================================================================================
 # == DO NEVER EDIT THE NEXT LINES for Raspberry Pi Pico VS Code Extension to work ==
 if(WIN32)
     set(USERHOME $ENV{USERPROFILE})
@@ -212,7 +226,6 @@ add_library(LibModule
             Src/interrupts.c
             Src/adc.c
             Src/robot_modes.c
-            Src/I2C.c
             Inc/main.h)
 
 target_include_directories(LibModule PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Inc)
@@ -237,7 +250,6 @@ target_link_libraries(RoboticArm
 )
 target_link_libraries(LibModule
                 pico_stdlib
-                hardware_i2c   
                 hardware_gpio   
                 hardware_pwm    
                 hardware_adc
@@ -251,7 +263,6 @@ target_include_directories(RoboticArm PRIVATE
 
 # Add any user requested libraries
 target_link_libraries(RoboticArm 
-        hardware_i2c
         hardware_gpio hardware_pwm
         hardware_adc
         LibModule
