@@ -1,3 +1,15 @@
+initial_angles = [-1.5980, 1.8597, -0.5616, -1.4775, -1.3549, -0.1015]';
+
+for i = 0:1000
+    x = 9.6*sin(pi*(i*0.001)/2) - 0.6;
+    y = -6.8*cos(pi*(i*0.001)/2);
+    z = 4;
+    pitch = 1.46 - 1.46*i*0.001;
+    yaw = -pi/2 + pi/2*i*0.001;
+    initial_angles = RobotMoveECME(x,y,z,pitch,yaw,initial_angles);
+end
+
+
 function [final_angles] = RobotMoveECME(x,y,z,pitch,yaw,initial_angles) 
 
 distances = [1.5,7.2,3,7,0.95,2.5,3.6,0];
@@ -27,7 +39,7 @@ x_initial = [transform_matrix(1,4),transform_matrix(2,4),transform_matrix(3,4)]'
 
 time_step = 0.001;
 counter = 0;
-lambda = 8e-2;
+lambda = 5;
 x_difference = 1;
 speed = 2;
 
@@ -70,7 +82,7 @@ pitch = -asin(transform_matrix(3,1));
 yaw = atan(transform_matrix(2,1)/cos(pitch)/transform_matrix(1,1)/cos(pitch));
 disp(transform_matrix);
 disp(new_angle);
-%disp(counter);
+disp(counter);
 x_initial = [transform_matrix(1,4),transform_matrix(2,4),transform_matrix(3,4),pitch,yaw]';
 disp(x_initial);
 final_angles = initial_angles;
