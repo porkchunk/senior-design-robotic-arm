@@ -9,10 +9,8 @@
 #include "robot_modes.h"
 #include "timer.h"
 #include "main.h"
-#include "I2C.h"
 
 #include "pico/stdlib.h"
-#include "hardware/i2c.h"
 #include "hardware/clocks.h"
 #include "hardware/pwm.h"
 #include "hardware/gpio.h"
@@ -29,7 +27,6 @@ int main()
     stdio_init_all();
     pwm_initialization();
     adc_initialization();
-    I2C_initialization();
     interrupt_initialization();
     initialize_auto_manual_pin();
     initialize_start_auto_mode_pin();
@@ -37,13 +34,16 @@ int main()
     //Positions robot in initial position and lets pico know where robot is
     set_zero_position();
     set_initial_position();
-    
+
     while (true) {
+        automatic_mode();
+    }
+    /*
         if(gpio_get(AUTO_MANUAL_SWITCH_PIN) == true){
-            manual_mode();
-        }
-        else{
             automatic_mode();
         }
-    }
+        else{
+            manual_mode();
+        }
+    */
 }

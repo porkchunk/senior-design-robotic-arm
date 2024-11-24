@@ -152,15 +152,19 @@ void claw_move(){
 }
 
 void set_zero_position(){
-    duty_cycle_set(0, 2*M_PI/3, -2*M_PI/3, 0, 1);
+    duty_cycle_set(0, M_PI/2, -M_PI/2, 0, 1);
     motor_move(slice_motors, chan_motors);
+    claw_position = false;
     claw_move(slice_motors, chan_motors);
 
     sleep_ms(1000);
 }
 
 void set_initial_position(){
-    forward_kinematics(0, 2*M_PI/3, -2*M_PI/3, 0 , xyzpitch);
+    forward_kinematics(0, 2*M_PI/3, -2*M_PI/3, 0, xyzpitch);
+    robot_move(xyzpitch);
+    //forward_kinematics(0, 2*M_PI/3, -2*M_PI/3, 0 , xyzpitch);
+   // robot_move(xyzpitch);
 }
 
 void robot_move(float xyzpitch[4]){
@@ -180,9 +184,9 @@ void robot_move(float xyzpitch[4]){
     float velocity[4][1];
     float new_angle[4];
     float delta_angle[4][1];
-    float time_step = 0.01; //make 0.00033
+    float time_step = 0.0025; //make 0.00033
     float error = 0.01;
-    float speed = 0.5;
+    float speed = 2;
 
     uint32_t count = 0;
 
