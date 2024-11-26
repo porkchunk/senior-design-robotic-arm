@@ -141,9 +141,12 @@ float map_function(float input, float input_start, float input_end, float output
     return output;
 }
 
-void claw_move(){
+void claw_move(bool narrow){
     if(claw_position == true){
         pwm_set_freq_duty(slice_motors[MOTOR_6], chan_motors[MOTOR_6], PWM_FREQ, 2.15/20);
+    }
+    else if((claw_position == false) && (narrow == true)){
+        pwm_set_freq_duty(slice_motors[MOTOR_6], chan_motors[MOTOR_6], PWM_FREQ, 1.95/20);
     }
     else{
         pwm_set_freq_duty(slice_motors[MOTOR_6], chan_motors[MOTOR_6], PWM_FREQ, 1.4/20);
@@ -155,19 +158,19 @@ void set_zero_position(){
     duty_cycle_set(0, M_PI/2, -M_PI/2, 0, 1);
     motor_move(slice_motors, chan_motors);
     claw_position = false;
-    claw_move(slice_motors, chan_motors);
+    claw_move(false);
 
     sleep_ms(1000);
 }
 
 void set_initial_position(){
     forward_kinematics(0, 2*M_PI/3, -2*M_PI/3, 0, xyzpitch);
-    robot_move(xyzpitch);
+    robot_move(xyzpitch, 2);
     //forward_kinematics(0, 2*M_PI/3, -2*M_PI/3, 0 , xyzpitch);
    // robot_move(xyzpitch);
 }
 
-void robot_move(float xyzpitch[4]){
+void robot_move(float xyzpitch[4], float speed){
     //Convert current duty_cycle to angle based on model of robot
     float theta1 = map_function(20*duty_cycle_motors.motor1, 0.5, 2.5, -M_PI/2, M_PI/2);
     float theta2 = map_function(20*duty_cycle_motors.motor2, 0.5, 2.5, M_PI, 0);
@@ -186,7 +189,6 @@ void robot_move(float xyzpitch[4]){
     float delta_angle[4][1];
     float time_step = 0.0025; //make 0.00033
     float error = 0.01;
-    float speed = 2;
 
     uint32_t count = 0;
 

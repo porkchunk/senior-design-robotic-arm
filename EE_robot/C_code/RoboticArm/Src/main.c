@@ -30,20 +30,21 @@ int main()
     interrupt_initialization();
     initialize_auto_manual_pin();
     initialize_start_auto_mode_pin();
+    initialize_DIP_switch_pins();
 
     //Positions robot in initial position and lets pico know where robot is
     set_zero_position();
     set_initial_position();
-
+    
     while (true) {
-        automatic_mode();
-    }
-    /*
         if(gpio_get(AUTO_MANUAL_SWITCH_PIN) == true){
-            automatic_mode();
+            manual_mode();
+            printf("X: %0.2f\n", xyzpitch[0]);
+            printf("Y: %0.2f\n", xyzpitch[1]);
+            printf("Z: %0.2f\n\n", xyzpitch[2]);
         }
         else{
-            manual_mode();
+            automatic_mode();
         }
-    */
+    }
 }
