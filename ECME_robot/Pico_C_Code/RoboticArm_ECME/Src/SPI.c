@@ -32,22 +32,26 @@ void SPI_initialization() {
     gpio_put( PIN_CS, 1 );
 }
 
-float MCP3008(int chan) {
+float MCP3208(int chan) {
     cs_select();
 
     size_t len = 3;
     uint8_t buffer[3];
-    buffer[0] = 1;
-    buffer[1] = (0b1000 + chan) << 4;
+    buffer[0] = 0b110 | (chan>>2);
+    buffer[1] = chan << 6;
     buffer[2] = 0;
+
+    printf("buffer1: %d\n", buffer[0]);
+    printf("buffer2: %d\n", buffer[1]);
+    printf("buffer3: %d\n", buffer[2]);
 
     uint8_t returnData[3];
     
     spi_write_read_blocking(SPI_PORT, buffer, returnData, sizeof(buffer));
 
-    int data = ((returnData[1] & 3) << 8) | returnData[2];
+    int data = ((returnData[1] & 0b1111) << 8) | returnData[2];
 
-    float val = (3.3 / 1023.0 ) * data;
+    float val = (3.3 / 4095.0 ) * data;
 
     cs_deselect();
 
@@ -56,7 +60,7 @@ float MCP3008(int chan) {
 
 void read_encoders(){
     for(int i=0; i<6; ++i){
-        actual_position[i] = MCP3008(i);
+        actual_position[i] = MCP3208(i);
         theta[i] = map_function(actual_position[i],0,0,0,0);
     }
 }

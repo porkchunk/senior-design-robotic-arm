@@ -65,8 +65,11 @@ int main()
     float norm2 = 0;
     float speed;
 
+    float read_value;
     while (true){
-
+        read_value = MCP3208(7);
+        printf("value: %0.3f\n", read_value);
+        sleep_ms(50);
         /*
         position[0] = 9.8;
         position[1] = 2;
