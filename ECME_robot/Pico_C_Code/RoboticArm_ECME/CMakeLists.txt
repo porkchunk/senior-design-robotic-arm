@@ -237,7 +237,6 @@ add_library(LibModule
             Src/interrupts.c
             Src/adc.c
             Src/robot_modes.c
-            Src/quaternion.C
             Src/UART.c
             Src/SPI.c
             Src/tests.c

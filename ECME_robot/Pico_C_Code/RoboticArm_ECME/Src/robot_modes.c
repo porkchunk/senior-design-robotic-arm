@@ -122,22 +122,6 @@ void automatic_mode()
 { 
     //If left joystick button is pressed run auto mode
     if(gpio_get(AUTO_START_SWITCH) == false){
-        position[0] = STARTING_X + 3;
-        position[1] = STARTING_Y - 9;
-        position[2] = STARTING_Z - 9;
-        position[3] = STARTING_PITCH;
-        //robot_move(position);
-
-        claw_position = true;
-        claw_move();
-
-        sleep_ms(500);
-
-        set_zero_position();
-
-        claw_position = false;
-        claw_move();
-
-        sleep_ms(500);
+        move_to_preset_location(1);
     }
 }
