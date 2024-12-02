@@ -333,6 +333,16 @@ void set_zero_position(){
     */
 }
 
+void claw_move(){
+    if(claw_position == true){
+        pwm_set_freq_duty(slice_motors[MOTOR_7], chan_motors[MOTOR_7], PWM_FREQ, 2.15/20);
+    }
+    else{
+        pwm_set_freq_duty(slice_motors[MOTOR_7], chan_motors[MOTOR_7], PWM_FREQ, 1.4/20);
+    }
+    pwm_set_enabled(slice_motors[MOTOR_7], true);
+}
+
 void robot_move(uint size, bool debug, float lambda, float position[size]){
 
     float position_final[5];

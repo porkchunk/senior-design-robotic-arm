@@ -75,6 +75,49 @@ void manual_mode(){
     claw_move();
 }
 
+void move_to_preset_location(int configuration_number){
+    float initial_position[6] = {0,0,0,0,0,0};
+    float intermediate_position[6] = {0};
+    float dropping_capsule_position[6] = {0}; 
+    float selected_configuration[6] = {0};
+
+    switch(configuration_number){
+        case 1:
+            for(int i; i<6; i++){
+                selected_configuration[i] = initial_position[i];
+            }
+            break;
+
+        case 2: 
+            for(int i; i<6; i++){
+                selected_configuration[i] = intermediate_position[i];
+            }
+            break;
+
+        case 3:
+            for(int i; i<6; i++){
+                selected_configuration[i] = dropping_capsule_position[i];
+            }
+            break;
+
+        default:
+            for(int i; i<6; i++){
+                selected_configuration[i] = initial_position[i];
+            }
+    }
+
+    float current_position[6] = {0};
+    int increments = 500;
+
+    for(int i=0; i<increments; i++){
+        for(int j=0; j<6; j++){
+            current_position[j] = selected_configuration[j]/increments;
+            target_position[j] = map_function(current_position[j],0,0,0,0); //Input here what the conversion is for angles to signal on the encoders
+        }
+        sleep_ms(10);
+    }
+}
+
 void automatic_mode()
 { 
     //If left joystick button is pressed run auto mode

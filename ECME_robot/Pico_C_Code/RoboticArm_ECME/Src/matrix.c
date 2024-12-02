@@ -4,24 +4,19 @@
 #include <math.h>
 
 int inverse(int matrix_size, float mat[matrix_size][matrix_size], float inverse[matrix_size][matrix_size]) {
-    // Augmenting the matrix with the identity matrix
     float aug[matrix_size][2 * matrix_size];
     for (int i = 0; i < matrix_size; i++) {
         for (int j = 0; j < matrix_size; j++) {
-            aug[i][j] = mat[i][j];  // Copy the original matrix
-            aug[i][j + matrix_size] = (i == j) ? 1.0 : 0.0;  // Augment with identity matrix
+            aug[i][j] = mat[i][j];  
+            aug[i][j + matrix_size] = (i == j) ? 1.0 : 0.0; 
         }
     }
 
-    // Performing Gaussian elimination
     for (int i = 0; i < matrix_size; i++) {
-        // Make the diagonal element 1 by dividing the entire row by that element
         if (aug[i][i] == 0) {
-            // If the pivot is zero, try to swap with a non-zero row below it
             bool swapped = false;
             for (int k = i + 1; k < matrix_size; k++) {
                 if (aug[k][i] != 0) {
-                    // Swap the rows
                     for (int j = 0; j < 2 * matrix_size; j++) {
                         float temp = aug[i][j];
                         aug[i][j] = aug[k][j];
@@ -42,13 +37,13 @@ int inverse(int matrix_size, float mat[matrix_size][matrix_size], float inverse[
             }
         }
 
-        // Normalize the current row
+    
         float diagElement = aug[i][i];
         for (int j = 0; j < 2 * matrix_size; j++) {
             aug[i][j] /= diagElement;
         }
 
-        // Make other elements in the current column 0 by subtracting the appropriate multiple of the current row
+
         for (int k = 0; k < matrix_size; k++) {
             if (k != i) {
                 float factor = aug[k][i];
@@ -59,7 +54,7 @@ int inverse(int matrix_size, float mat[matrix_size][matrix_size], float inverse[
         }
     }
 
-    // Extract the inverse matrix from the augmented matrix
+
     for (int i = 0; i < matrix_size; i++) {
         for (int j = 0; j < matrix_size; j++) {
             inverse[i][j] = aug[i][j + matrix_size];

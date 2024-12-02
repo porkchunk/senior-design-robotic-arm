@@ -48,8 +48,8 @@ extern float actual_position[6];
 void pwm_set_freq_duty(uint slice_num, uint chan, uint32_t f, float d);
 void motor_initialization();
 void motor_move();
-void claw_move();
 void calculate_PID();
+void pwm_initialization();
 //void speed_set(float theta1, float theta2, float theta3, float theta4, float theta5, float theta6, uint config);
 
 

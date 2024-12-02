@@ -41,10 +41,6 @@ float MCP3208(int chan) {
     buffer[1] = chan << 6;
     buffer[2] = 0;
 
-    printf("buffer1: %d\n", buffer[0]);
-    printf("buffer2: %d\n", buffer[1]);
-    printf("buffer3: %d\n", buffer[2]);
-
     uint8_t returnData[3];
     
     spi_write_read_blocking(SPI_PORT, buffer, returnData, sizeof(buffer));

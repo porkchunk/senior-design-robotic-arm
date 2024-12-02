@@ -27,11 +27,11 @@ x_initial = [transform_matrix(1,4),transform_matrix(2,4),transform_matrix(3,4)]'
 
 time_step = 0.001;
 counter = 0;
-lambda = 8e-2;
+lambda = 10;
 x_difference = 1;
 speed = 2;
 
-while(norm(x_difference) >= 0.05)
+while(norm(x_difference) >= 0.01)
     x_difference = x_final - x_initial;
 
     r_error1 = final_rotation_matrix*transpose(initial_rotation_matrix);
@@ -62,7 +62,7 @@ while(norm(x_difference) >= 0.05)
 
     [jacobian,~] = FindingJacobianMatrixandTransformationMatrix(new_angle, distances);
     counter = counter + 1;
-    if counter>7000
+    if counter>6500
         break;
     end
 end

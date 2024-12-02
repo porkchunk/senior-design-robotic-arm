@@ -51,7 +51,7 @@ void motor_move(){
             gpio_put(PIN_DIRECTION[i], false);
         }
         //Normalizes control signal to be closer to the value of a duty cycle value from 0 to 1
-        control_signal[i] = fabs(control_signal[i])/3660; //Divide here by whatever (Vmaxencoder/3.3)*4096 equals
+        control_signal[i] = fabs(control_signal[i])/4095; //Divide here by whatever (Vmaxencoder/3.3)*4096 equals
         if(control_signal[i] > 1){
             control_signal[i] = 1;
         }
@@ -60,7 +60,16 @@ void motor_move(){
             control_signal[i] = 0.3;
         }
     }
-    
+
+    //These steps are necessary since motor 2 uses a different control signal from the Sparkmax controller with 1ms to 2ms being the control signal forward to reverse
+    control_signal[MOTOR_2] = map_function(control_signal[MOTOR_2], 0.3, 1, 0, 0.5);
+    if(gpio_get(PIN_DIRECTION[MOTOR_2]) == true){
+        control_signal[MOTOR_2] = (1.5 + control_signal[MOTOR_2])/20;
+    }
+    else{
+        control_signal[MOTOR_2] = (1.5 - control_signal[MOTOR_2])/20;
+    }
+
     duty_cycle_motors.motor1 = control_signal[MOTOR_1];
     duty_cycle_motors.motor2 = control_signal[MOTOR_2];
     duty_cycle_motors.motor3 = control_signal[MOTOR_3];
@@ -81,16 +90,6 @@ void motor_move(){
     pwm_set_enabled(slice_motors[MOTOR_4], true);
     pwm_set_enabled(slice_motors[MOTOR_5], true);
     pwm_set_enabled(slice_motors[MOTOR_6], true);
-}
-
-void claw_move(){
-    if(claw_position == true){
-        pwm_set_freq_duty(slice_motors[MOTOR_7], chan_motors[MOTOR_7], PWM_FREQ, 2.15/20);
-    }
-    else{
-        pwm_set_freq_duty(slice_motors[MOTOR_7], chan_motors[MOTOR_7], PWM_FREQ, 1.4/20);
-    }
-    pwm_set_enabled(slice_motors[MOTOR_7], true);
 }
 
 void motor_initialization(){
@@ -133,5 +132,31 @@ void pwm_set_freq_duty(uint slice_num, uint chan, uint32_t f, float d)
     pwm_set_clkdiv(slice_num, clkdiv);
     pwm_set_wrap(slice_num, wrapval);
     pwm_set_chan_level(slice_num, chan, chan_level);
+}
+
+void pwm_initialization(){
+    gpio_set_function(PIN_MOTOR_1, GPIO_FUNC_PWM);
+    gpio_set_function(PIN_MOTOR_2, GPIO_FUNC_PWM);
+    gpio_set_function(PIN_MOTOR_3, GPIO_FUNC_PWM);
+    gpio_set_function(PIN_MOTOR_4, GPIO_FUNC_PWM);
+    gpio_set_function(PIN_MOTOR_5, GPIO_FUNC_PWM);
+    gpio_set_function(PIN_MOTOR_6, GPIO_FUNC_PWM);
+    gpio_set_function(PIN_MOTOR_7, GPIO_FUNC_PWM);
+
+    slice_motors[MOTOR_1] = pwm_gpio_to_slice_num(PIN_MOTOR_1);
+    slice_motors[MOTOR_2] = pwm_gpio_to_slice_num(PIN_MOTOR_2);
+    slice_motors[MOTOR_3] = pwm_gpio_to_slice_num(PIN_MOTOR_3);
+    slice_motors[MOTOR_4] = pwm_gpio_to_slice_num(PIN_MOTOR_4);
+    slice_motors[MOTOR_5] = pwm_gpio_to_slice_num(PIN_MOTOR_5);
+    slice_motors[MOTOR_6] = pwm_gpio_to_slice_num(PIN_MOTOR_6);
+    slice_motors[MOTOR_7] = pwm_gpio_to_slice_num(PIN_MOTOR_7);
+
+    chan_motors[MOTOR_1] = pwm_gpio_to_channel(PIN_MOTOR_1);
+    chan_motors[MOTOR_2] = pwm_gpio_to_channel(PIN_MOTOR_2);
+    chan_motors[MOTOR_3] = pwm_gpio_to_channel(PIN_MOTOR_3);
+    chan_motors[MOTOR_4] = pwm_gpio_to_channel(PIN_MOTOR_4);
+    chan_motors[MOTOR_5] = pwm_gpio_to_channel(PIN_MOTOR_5);
+    chan_motors[MOTOR_6] = pwm_gpio_to_channel(PIN_MOTOR_6);
+    chan_motors[MOTOR_7] = pwm_gpio_to_channel(PIN_MOTOR_7);
 }
 

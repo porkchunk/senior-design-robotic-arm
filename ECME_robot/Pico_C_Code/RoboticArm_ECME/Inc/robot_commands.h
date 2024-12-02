@@ -17,6 +17,7 @@
 extern float position[POSITION_SIZE];
 extern volatile bool claw_position;
 extern float theta[6];
+extern volatile bool claw_position;
 
 void transform_matrix(float alpha, float a, float d, float theta, float T[MATRIX_ROW_SIZE][MATRIX_COL_SIZE]);
 void forward_kinematics(float theta1, float theta2, float theta3, float theta4, float theta5, float theta6, float position[POSITION_SIZE], float rotation_matrix[3][3]);
@@ -24,5 +25,6 @@ void jacobian_function(float theta1, float theta2, float theta3, float theta4, f
 float map_function(float input, float input_start, float input_end, float output_start, float output_end);
 void robot_move(uint size, bool debug, float lambda, float position[size]);
 void set_zero_position();
+void claw_move();
 
 #endif

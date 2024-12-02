@@ -1,7 +1,6 @@
-function [x_initial] = RobotMoveECME(x,y,z,pitch,yaw) 
+function [final_angles] = RobotMoveECME(x,y,z,pitch,yaw,initial_angles) 
 
 distances = [1.5,7.2,3,7,0.95,2.5,3.6,0];
-initial_angles = [0,pi/2,-pi/2,-pi/2,pi/2,0]';
 roll=0;
 
 T1 = [cos(yaw), -sin(yaw), 0;
@@ -20,23 +19,19 @@ T3 = [1,0,0;
 
 final_rotation_matrix = T1*T2*T3;
 initial_rotation_matrix = transform_matrix(1:3,1:3);
-%disp(final_rotation_matrix);
-
-q_initial = rotm2quat(initial_rotation_matrix);
-q_final = rotm2quat(final_rotation_matrix);
 
 x_final = [x,y,z]';
 x_initial = [transform_matrix(1,4),transform_matrix(2,4),transform_matrix(3,4)]';
 
 [jacobian,~] = FindingJacobianMatrixandTransformationMatrix(initial_angles, distances);
-%disp(jacobian);
+
 time_step = 0.001;
 counter = 0;
-lambda = 8e-2;
+lambda = 8e-1;
 x_difference = 1;
 speed = 2;
 
-while(norm(x_difference) >= 0.05)
+while(norm(x_difference) >= 0.01)
     x_difference = x_final - x_initial;
 
     r_error1 = final_rotation_matrix*transpose(initial_rotation_matrix);
@@ -49,9 +44,7 @@ while(norm(x_difference) >= 0.05)
 
     velocity = speed*(total_difference/norm(total_difference));
     
-    %jacobian_inverse =  jacobian' * inv((jacobian*jacobian' + lambda*eye(6)));
-    %jacobian_inverse =  inv((jacobian'*jacobian + lambda*eye(6))) * jacobian' ;
-    %jacobian_inverse = pinv(jacobian,1e-1);
+    jacobian_inverse =  jacobian' * inv((jacobian*jacobian' + lambda*eye(6)));
 
     delta_angle = jacobian_inverse*velocity;
     
@@ -67,14 +60,9 @@ while(norm(x_difference) >= 0.05)
     x_initial = [transform_matrix(1,4),transform_matrix(2,4),transform_matrix(3,4)]';
     position = [x_initial;pitch;yaw];
 
-    if counter < 3000
-        %disp(position)
-
-    end
-
     [jacobian,~] = FindingJacobianMatrixandTransformationMatrix(new_angle, distances);
     counter = counter + 1;
-    if counter>7000
+    if counter>6500
         break;
     end
 end
@@ -82,6 +70,8 @@ pitch = -asin(transform_matrix(3,1));
 yaw = atan(transform_matrix(2,1)/cos(pitch)/transform_matrix(1,1)/cos(pitch));
 disp(transform_matrix);
 disp(new_angle);
-disp(counter);
+%disp(counter);
 x_initial = [transform_matrix(1,4),transform_matrix(2,4),transform_matrix(3,4),pitch,yaw]';
+disp(x_initial);
+final_angles = initial_angles;
 end
