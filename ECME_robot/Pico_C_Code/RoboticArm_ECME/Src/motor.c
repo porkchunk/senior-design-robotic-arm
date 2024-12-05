@@ -20,7 +20,7 @@ float error_integral[6] = {0};
 float control_signal[6] = {0};
 
 //Add direction pins here
-const int PIN_DIRECTION[6] = {0};
+const int PIN_DIRECTION[6] = {DIRECTION_MOTOR_1, 2, DIRECTION_MOTOR_3, DIRECTION_MOTOR_4, DIRECTION_MOTOR_5, DIRECTION_MOTOR_6};
 
 //PID terms for user to adjust
 float proportional[6] = {0};
@@ -63,7 +63,7 @@ void motor_move(){
 
     //These steps are necessary since motor 2 uses a different control signal from the Sparkmax controller with 1ms to 2ms being the control signal forward to reverse
     control_signal[MOTOR_2] = map_function(control_signal[MOTOR_2], 0.3, 1, 0, 0.5);
-    if(gpio_get(PIN_DIRECTION[MOTOR_2]) == true){
+    if(gpio_get(PIN_DIRECTION[1]) == true){
         control_signal[MOTOR_2] = (1.5 + control_signal[MOTOR_2])/20;
     }
     else{
@@ -121,6 +121,18 @@ void motor_initialization(){
     chan_motors[MOTOR_5] = pwm_gpio_to_channel(PIN_MOTOR_5);
     chan_motors[MOTOR_6] = pwm_gpio_to_channel(PIN_MOTOR_6);
     chan_motors[MOTOR_7] = pwm_gpio_to_channel(PIN_MOTOR_7);
+
+    gpio_init(DIRECTION_MOTOR_1);
+    gpio_init(DIRECTION_MOTOR_3);
+    gpio_init(DIRECTION_MOTOR_4);
+    gpio_init(DIRECTION_MOTOR_5);
+    gpio_init(DIRECTION_MOTOR_6);
+
+    gpio_set_dir(DIRECTION_MOTOR_1, GPIO_OUT);
+    gpio_set_dir(DIRECTION_MOTOR_3, GPIO_OUT);
+    gpio_set_dir(DIRECTION_MOTOR_4, GPIO_OUT);
+    gpio_set_dir(DIRECTION_MOTOR_5, GPIO_OUT);  
+    gpio_set_dir(DIRECTION_MOTOR_6, GPIO_OUT);
 }
 
 void pwm_set_freq_duty(uint slice_num, uint chan, uint32_t f, float d)

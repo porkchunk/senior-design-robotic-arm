@@ -47,11 +47,10 @@ float MCP3208(int chan) {
 
     int data = ((returnData[1] & 0b1111) << 8) | returnData[2];
 
-    float val = (3.3 / 4095.0 ) * data;
-
     cs_deselect();
 
-    return val;
+    return data;
+    sleep_ms(5);
 }
 
 void read_encoders(){

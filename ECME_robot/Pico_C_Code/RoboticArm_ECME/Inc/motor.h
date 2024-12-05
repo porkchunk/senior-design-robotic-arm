@@ -14,9 +14,15 @@
 #define PIN_MOTOR_2 20
 #define PIN_MOTOR_3 19
 #define PIN_MOTOR_4 18
-#define PIN_MOTOR_5 17
-#define PIN_MOTOR_6 16
-#define PIN_MOTOR_7 15
+#define PIN_MOTOR_5 16
+#define PIN_MOTOR_6 17
+#define PIN_MOTOR_7 22
+
+#define DIRECTION_MOTOR_1 8
+#define DIRECTION_MOTOR_3 7
+#define DIRECTION_MOTOR_4 6
+#define DIRECTION_MOTOR_5 5
+#define DIRECTION_MOTOR_6 4
 
 #include "pico/stdlib.h"
 #include "main.h"
