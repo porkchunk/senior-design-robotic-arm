@@ -83,25 +83,25 @@ void move_to_preset_location(int configuration_number){
 
     switch(configuration_number){
         case 1:
-            for(int i; i<6; i++){
+            for(int i=0; i<6; i++){
                 selected_configuration[i] = initial_position[i];
             }
             break;
 
         case 2: 
-            for(int i; i<6; i++){
+            for(int i=0; i<6; i++){
                 selected_configuration[i] = intermediate_position[i];
             }
             break;
 
         case 3:
-            for(int i; i<6; i++){
+            for(int i=0; i<6; i++){
                 selected_configuration[i] = dropping_capsule_position[i];
             }
             break;
 
         default:
-            for(int i; i<6; i++){
+            for(int i=0; i<6; i++){
                 selected_configuration[i] = initial_position[i];
             }
     }
@@ -124,4 +124,14 @@ void automatic_mode()
     if(gpio_get(AUTO_START_SWITCH) == false){
         move_to_preset_location(1);
     }
+}
+
+void button_initialization(){
+    gpio_init(BUTTON_LEFT);
+    gpio_set_input_enabled(BUTTON_LEFT, true);
+    gpio_pull_down(BUTTON_LEFT);
+
+    gpio_init(BUTTON_RIGHT);
+    gpio_set_input_enabled(BUTTON_RIGHT, true);
+    gpio_pull_down(BUTTON_RIGHT);
 }

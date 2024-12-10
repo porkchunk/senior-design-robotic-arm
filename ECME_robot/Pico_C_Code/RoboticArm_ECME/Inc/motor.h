@@ -4,8 +4,8 @@
 #define MOTOR_1 0
 #define MOTOR_2 1
 #define MOTOR_3 2
-#define MOTOR_4 3
-#define MOTOR_5 4
+#define MOTOR_4 3 
+#define MOTOR_5 4 
 #define MOTOR_6 5
 #define MOTOR_7 6
 
@@ -13,15 +13,15 @@
 #define PIN_MOTOR_1 21
 #define PIN_MOTOR_2 20
 #define PIN_MOTOR_3 19
-#define PIN_MOTOR_4 18
-#define PIN_MOTOR_5 16
+#define PIN_MOTOR_4 18 
+#define PIN_MOTOR_5 16 
 #define PIN_MOTOR_6 17
 #define PIN_MOTOR_7 22
 
 #define DIRECTION_MOTOR_1 8
 #define DIRECTION_MOTOR_3 7
-#define DIRECTION_MOTOR_4 6
-#define DIRECTION_MOTOR_5 5
+#define DIRECTION_MOTOR_4 6 
+#define DIRECTION_MOTOR_5 5 
 #define DIRECTION_MOTOR_6 4
 
 #include "pico/stdlib.h"
@@ -48,16 +48,19 @@ struct pwmSignal{
 extern struct pwmSignal duty_cycle_motors;
 extern uint slice_motors[NUMBER_OF_MOTORS];
 extern uint chan_motors[NUMBER_OF_MOTORS];
-extern float target_position[6];
-extern float actual_position[6];
+extern int target_position[6];
+extern int actual_position[6];
+extern int motor_number;
 
 void pwm_set_freq_duty(uint slice_num, uint chan, uint32_t f, float d);
 void motor_initialization();
 void motor_move();
 void calculate_PID();
 void pwm_initialization();
-//void speed_set(float theta1, float theta2, float theta3, float theta4, float theta5, float theta6, uint config);
-
+void set_pin_directions();
+void update_motor_speed();
+void calculate_control_signals();
+void move_motor_with_controller();
 
 #endif
 

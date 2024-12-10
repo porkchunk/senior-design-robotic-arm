@@ -32,7 +32,7 @@ void SPI_initialization() {
     gpio_put( PIN_CS, 1 );
 }
 
-float MCP3208(int chan) {
+int MCP3208(int chan) {
     cs_select();
 
     size_t len = 3;

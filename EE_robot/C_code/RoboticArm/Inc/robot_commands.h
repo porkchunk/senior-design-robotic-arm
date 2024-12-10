@@ -20,5 +20,6 @@ void claw_move(bool narrow);
 void robot_move(float xyzpitch[4], float speed);
 void set_initial_position();
 void set_zero_position();
+void set_column_position(int column_number);
 
 #endif

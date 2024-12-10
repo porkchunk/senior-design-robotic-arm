@@ -19,5 +19,6 @@ void initialize_auto_manual_pin();
 void initialize_start_auto_mode_pin();
 int get_DIP_number();
 void initialize_DIP_switch_pins();
+void default_manual_theta();
 
 #endif

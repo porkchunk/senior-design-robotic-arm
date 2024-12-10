@@ -170,6 +170,51 @@ void set_initial_position(){
    // robot_move(xyzpitch);
 }
 
+void set_column_position(int column_number){
+    switch(column_number){
+        case 1:
+            xyzpitch[0] = 10.7;
+            xyzpitch[1] = 19.8;
+            xyzpitch[2] = 18.51;
+            xyzpitch[3] = 0;
+            robot_move(xyzpitch, 2);
+            break;
+        case 2:
+            xyzpitch[0] = 16.8;
+            xyzpitch[1] = 13.7;
+            xyzpitch[2] = 18.51;
+            xyzpitch[3] = 0;
+            robot_move(xyzpitch, 2);
+            break;
+        case 3:
+            xyzpitch[0] = 19.53;
+            xyzpitch[1] = 6.54;
+            xyzpitch[2] = 18.51;
+            xyzpitch[3] = 0;
+            robot_move(xyzpitch, 2);
+            break;
+        case 4:
+            xyzpitch[0] = 20.55;
+            xyzpitch[1] = -2.01;
+            xyzpitch[2] = 18.51;
+            xyzpitch[3] = 0;
+            robot_move(xyzpitch, 2);
+            break;
+        case 8:
+            xyzpitch[0] = 20.55;
+            xyzpitch[1] = -2.01;
+            xyzpitch[2] = 18.51;
+            xyzpitch[3] = 0;
+            robot_move(xyzpitch, 2);
+        default: 
+            xyzpitch[0] = 14.12;
+            xyzpitch[1] = -18.12;
+            xyzpitch[2] = 18.29;
+            xyzpitch[3] = 0;
+            robot_move(xyzpitch, 2);
+    }
+}
+
 void robot_move(float xyzpitch[4], float speed){
     //Convert current duty_cycle to angle based on model of robot
     float theta1 = map_function(20*duty_cycle_motors.motor1, 0.5, 2.5, -M_PI/2, M_PI/2);

@@ -39,9 +39,6 @@ int main()
     while (true) {
         if(gpio_get(AUTO_MANUAL_SWITCH_PIN) == true){
             manual_mode();
-            printf("X: %0.2f\n", xyzpitch[0]);
-            printf("Y: %0.2f\n", xyzpitch[1]);
-            printf("Z: %0.2f\n\n", xyzpitch[2]);
         }
         else{
             automatic_mode();

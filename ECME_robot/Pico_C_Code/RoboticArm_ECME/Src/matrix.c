@@ -32,7 +32,6 @@ int inverse(int matrix_size, float mat[matrix_size][matrix_size], float inverse[
                           inverse[i][j] = 0;
                       }
                  }
-                printf("Matrix is singular, cannot find its inverse.\n");
                 return 0;
             }
         }
@@ -119,7 +118,7 @@ void add_subtract_matrix(int m, int n, float matrix1[m][n],float matrix2[m][n],f
         }
     }
 }
-
+/// Calculates the magnitude of a vector
 float norm(int size, float position_difference[size]){
     float norm_squared = 0;
     float norm;
@@ -138,7 +137,7 @@ void calculate_velocity(int size, float position_difference[size],float velocity
     }
 }
 
-// function to display the matrix
+/// function to display s matrix
 void display(int m, int n, float result[m][n]) {
 
    printf("\nOutput Matrix:\n");
@@ -173,21 +172,6 @@ void pseudo_inverse(int m, int n, float lambda, float matrix[m][n], float pseudo
     add_subtract_matrix(m, m, intermediate_term, identity, first_term_linearly_surjective, true);
     inverse(m, first_term_linearly_surjective, first_term_linearly_surjective_inverse);
     multiply_matrices(n, n, m, matrix_transpose, first_term_linearly_surjective_inverse, pseudo_inverse);
-
-    /*
-    transpose(m, n, matrix, matrix_transpose);
-    multiply_matrices(m, n, m, matrix, matrix_transpose, first_term_linearly_surjective);
-
-    if(inverse(m, first_term_linearly_surjective, first_term_linearly_surjective_inverse) == 1){
-        multiply_matrices(n, m, m, matrix_transpose, first_term_linearly_surjective_inverse, pseudo_inverse);
-    }
-    else{
-        printf("injective \n");
-        multiply_matrices(n, m, n, matrix_transpose, matrix, first_term_linearly_injective);
-        inverse(n, first_term_linearly_injective, first_term_linearly_injective_inverse);
-        multiply_matrices(n, n, m, first_term_linearly_injective_inverse, matrix_transpose, pseudo_inverse);
-    }
-   */
 }
 
 void euler_to_rotation_matrix(float pitch, float yaw, float rotation_matrix[3][3]){    

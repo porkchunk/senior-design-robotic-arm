@@ -9,10 +9,14 @@
 #define STARTING_PITCH 0
 #define STARTING_YAW 0
 
+#define BUTTON_LEFT 14 //prev 14
+#define BUTTON_RIGHT 15 //prev 15
+
 void manual_mode();
 void automatic_mode();
 void initialize_auto_manual_pin();
 void initialize_start_auto_mode_pin();
+void button_initialization();
 void move_to_preset_location(int configuration_number);
 
 #endif

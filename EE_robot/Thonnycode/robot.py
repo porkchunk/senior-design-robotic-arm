@@ -5,8 +5,8 @@ from time import sleep, ticks_us
 
 distance_link_1 = 9.5 
 distance_link_2 = 10.4 
-distance_link_3 = 8.9 
-distance_link_4 = 16.7 
+distance_link_3 = 8.75
+distance_link_4 = 17 
 
 global signal1,signal2,signal3,signal4,claw_position
 

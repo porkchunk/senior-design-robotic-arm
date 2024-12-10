@@ -69,7 +69,7 @@ void forward_kinematics(float theta1, float theta2, float theta3, float theta4, 
     float R13 = - c5*(c1*c2*(c3*s4 + c4*s3) + c1*s2*(c3*c4 - s3*s4)) - s5*(c1*c2*(c3*c4 - s3*s4) - c1*s2*(c3*s4 + c4*s3));
     float R23 = - c5*(c2*s1*(c3*s4 + c4*s3) + s1*s2*(c3*c4 - s3*s4)) - s5*(c2*s1*(c3*c4 - s3*s4) - s1*s2*(c3*s4 + c4*s3));
     float R33 = c5*(c2*(c3*c4 - s3*s4) - s2*(c3*s4 + c4*s3)) - s5*(c2*(c3*s4 + c4*s3) + s2*(c3*c4 - s3*s4));
-    
+    /*
     if(fabs(R11) < 0.000001){
         R11 = 0;
     }
@@ -98,9 +98,8 @@ void forward_kinematics(float theta1, float theta2, float theta3, float theta4, 
     if(fabs(R33) < 0.000001){
         R33 = 0;
     }
-    //position[3] = atanf(R32/R33); ROLL (NEED TO GET RID OF WE CANT ROLL OUR ROBOT)
-  
-    position[3] = -asinf(R31); //atanf(-R31/(sqrtf(powf(R11,2) + powf(R21,2)))); //PITCH
+    */
+    position[3] = -asinf(R31); //PITCH
     position[4] = atanf(R21/cos(position[3])/R11/cos(position[3])); //YAW
     
     rotation_matrix[0][0] = R11;
@@ -307,7 +306,7 @@ float map_function(float input, float input_start, float input_end, float output
 }
 
 void set_zero_position(){
-    //forward_kinematics(0,M_PI/2,-M_PI/2,-M_PI/2,M_PI/2,0,position);
+    
     theta[0] = 0;
     theta[1] = M_PI/2;
     theta[2] = -M_PI/2;
@@ -315,15 +314,6 @@ void set_zero_position(){
     theta[4] = M_PI/2;
     theta[5] = 0;
     /*
-    position[0] = 0;
-    position[1] = 0;
-    position[2] = 0;
-    position[3] = 0;
-    position[4] = 0;
-    */
-
-    //robot_move(5, position);
-   /*
     target_position[MOTOR_1] = map_function(theta[0],0,0,0,0);
     target_position[MOTOR_2] = map_function(theta[1],0,0,0,0);
     target_position[MOTOR_3] = map_function(theta[2],0,0,0,0);
@@ -335,7 +325,7 @@ void set_zero_position(){
 
 void claw_move(){
     if(claw_position == true){
-        pwm_set_freq_duty(slice_motors[MOTOR_7], chan_motors[MOTOR_7], PWM_FREQ, 2.15/20);
+        pwm_set_freq_duty(slice_motors[MOTOR_7], chan_motors[MOTOR_7], PWM_FREQ, 1.8/20);
     }
     else{
         pwm_set_freq_duty(slice_motors[MOTOR_7], chan_motors[MOTOR_7], PWM_FREQ, 1.4/20);
